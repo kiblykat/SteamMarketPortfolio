@@ -23,7 +23,7 @@ const Home = () => {
               <h1 className=" text-6xl font-semibold">${balance.toFixed(2)}</h1>
               <button
                 onClick={() => navigate("/transfer")}
-                className="btn rounded-full w-52 mt-16 bg-blue-900 text-white"
+                className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"
               >
                 Transfer Funds
               </button>

@@ -49,7 +49,7 @@ const Tr_Withdraw = () => {
   return (
     <div className="bg-stone-100 h-full">
       <div className="flex flex-row justify-center">
-        <div className="flex flex-col bg-white shadow-lg m-8 rounded-lg border-l-8 border-solid border-blue-300">
+        <div className="flex flex-col bg-white shadow-lg m-8 rounded-lg border-l-8 border-solid border-gray-300">
           <div className="flex flex-row justify-between">
             <i
               data-testid="back-button"
@@ -61,7 +61,7 @@ const Tr_Withdraw = () => {
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-row items-center justify-center m-5 mb-2">
               <p className="text-center text-2xl font-bold">Withdraw Amount</p>
-              <i className="text-3xl text-blue-800 fa-solid fa-circle-arrow-left p-2"></i>
+              <i className="text-3xl text-gray-800 fa-solid fa-circle-arrow-left p-2"></i>
             </div>
             <div className="flex flex-row items-center justify-center m-8">
               <p className="text-center font-bold mx-2">$</p>
@@ -76,7 +76,7 @@ const Tr_Withdraw = () => {
             <button
               data-testid="withdraw-button"
               onClick={() => handleWithdraw()}
-              className="btn rounded-full w-52 mb-16 bg-blue-900 text-white"
+              className="btn rounded-full w-52 mb-16 bg-gray-900 text-white"
             >
               Withdraw
             </button>
