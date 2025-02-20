@@ -4,22 +4,31 @@ import { useContext, useState } from "react";
 import GlobalContext from "../GlobalContext";
 
 const Tr_Deposit = () => {
-  const [amount, setAmount] = useState<string>("");
+  const [steamItem, setSteamItem] = useState<string>("");
+  const [price, setPrice] = useState<string>("");
+  const [quantity, setQuantity] = useState<number | "">("");
   const { balance, setBalance, transactions, setTransactions } =
     useContext(GlobalContext);
 
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (newValue === "" || !isNaN(Number(newValue))) {
+      setQuantity(newValue === "" ? "" : Number(newValue));
+    }
+  };
+
   const handleDeposit = (): void => {
     //check if the input matches a valid number format
-    const isValidFormat = /^\d*\.?\d{0,2}$/.test(amount);
+    const isValidFormat = /^\d*\.?\d{0,2}$/.test(price);
 
     if (!isValidFormat) {
-      toast.error("Please enter a valid amount");
+      toast.error("Please enter a valid price");
       return;
     }
 
-    const depositAmount = parseFloat(amount);
+    const depositAmount = parseFloat(price);
     if (isNaN(depositAmount) || depositAmount <= 0) {
-      toast.error("Please enter a valid amount");
+      toast.error("Please enter a valid price");
       return;
     }
 
@@ -29,13 +38,13 @@ const Tr_Deposit = () => {
       ...transactions,
       {
         date: new Date(),
-        amount: depositAmount,
+        price: depositAmount,
         balance: newBalance,
       },
     ]);
 
     toast.success(
-      `$${depositAmount.toFixed(2)} has been deposited to your account`
+      `You have bought ${quantity} of ${steamItem} for ${price} each`
     );
     navigate("/transfer"); // navigate back to transfer page after successful deposit
   };
@@ -55,18 +64,28 @@ const Tr_Deposit = () => {
           </div>
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-row items-center justify-center m-5 mb-2">
-              <p className="text-center text-2xl font-bold">Deposit Amount</p>
+              <p className="text-center text-2xl font-bold">Buy Steam Items</p>
               <i className="text-3xl text-blue-800 fa-solid fa-circle-arrow-right p-2"></i>
             </div>
             <div className="flex flex-row items-center justify-center m-8">
-              <p className="text-center font-bold mx-2">$</p>
               <input
-                placeholder="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="py-10 input border border-gray-300 rounded-xl text-4xl w-48"
+                placeholder="Item"
+                value={steamItem}
+                onChange={(e) => setSteamItem(e.target.value)}
+                className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
               />
-              <p className="text-center font-bold mx-2">SGD</p>
+              <input
+                placeholder="Price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
+              />
+              <input
+                placeholder="Quantity"
+                value={quantity}
+                onChange={(e) => handleQuantityChange(e)}
+                className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
+              />
             </div>
             <button
               data-testid="deposit-button"

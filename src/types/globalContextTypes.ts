@@ -31,7 +31,7 @@ export interface SlideInTextProps {
 
 export interface Transaction {
   date: Date;
-  amount: number;
+  price: number;
   balance: number;
 }
 
