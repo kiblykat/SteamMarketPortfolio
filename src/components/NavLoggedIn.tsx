@@ -4,14 +4,8 @@ import GlobalContext from "../GlobalContext";
 import { Tabs } from "../types/globalContextTypes";
 
 const NavLoggedIn = () => {
-  const {
-    isLoggedIn,
-    setIsLoggedIn,
-    activeTab,
-    setActiveTab,
-    isMenuOpen,
-    setIsMenuOpen,
-  } = useContext(GlobalContext);
+  const { activeTab, setActiveTab, isMenuOpen, setIsMenuOpen } =
+    useContext(GlobalContext);
   const navigate = useNavigate();
 
   function handleMenuOpen(bool: boolean) {
@@ -20,11 +14,7 @@ const NavLoggedIn = () => {
 
   function handleTabChange(tab: Tabs) {
     setActiveTab(tab);
-    if (tab !== "Landing") {
-      navigate(`/${tab.toLowerCase()}`);
-    } else {
-      navigate("/");
-    }
+    navigate(`/${tab.toLowerCase()}`);
   }
 
   return (
@@ -35,9 +25,9 @@ const NavLoggedIn = () => {
             {/* Mobile Screen Burger */}
             <button
               onClick={() => handleMenuOpen(!isMenuOpen)}
-              className={`md:hidden text-white hover:bg-white/20 p-4 w-14 m-2 rounded-full ${
-                !isLoggedIn ? "hidden" : null
-              }`}
+              className={
+                "md:hidden text-white hover:bg-white/20 p-4 w-14 m-2 rounded-full"
+              }
             >
               {!isMenuOpen ? (
                 <i className="fa-solid fa-bars"></i>
@@ -48,7 +38,6 @@ const NavLoggedIn = () => {
             {/* End Mobile Screen Burger */}
             {/* Right Tabs */}
             <img
-              onClick={() => handleTabChange("Landing")}
               src="gic3.png"
               className="min-w-16 w-16 rounded-full cursor-pointer"
             ></img>
@@ -88,10 +77,7 @@ const NavLoggedIn = () => {
                 }
               ></i>
             </div>
-            <p
-              onClick={() => setIsLoggedIn(false)}
-              className="text-center font-semibold text-gray-300 text-l min-w-24 px-2 hover:cursor-pointer text-opacity-70 hover:text-opacity-100"
-            >
+            <p className="text-center font-semibold text-gray-300 text-l min-w-24 px-2 hover:cursor-pointer text-opacity-70 hover:text-opacity-100">
               LOG OUT
             </p>
           </div>

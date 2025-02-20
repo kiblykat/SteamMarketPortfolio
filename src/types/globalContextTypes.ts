@@ -1,6 +1,4 @@
 export interface GlobalContextType {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (bool: boolean) => void;
   activeTab: string;
   setActiveTab: (tab: "Landing" | "Home" | "Transfer" | "Statement") => void;
   isMenuOpen: boolean;
@@ -12,8 +10,6 @@ export interface GlobalContextType {
 }
 
 export const initialGlobalState: GlobalContextType = {
-  isLoggedIn: false,
-  setIsLoggedIn: () => {},
   activeTab: "Landing",
   setActiveTab: () => {},
   isMenuOpen: false,

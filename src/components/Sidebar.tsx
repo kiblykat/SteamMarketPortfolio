@@ -10,11 +10,7 @@ const Sidebar = () => {
 
   function handleTabChange(tab: Tabs) {
     setActiveTab(tab);
-    if (tab !== "Landing") {
-      navigate(`/${tab.toLowerCase()}`);
-    } else {
-      navigate("/");
-    }
+    navigate(`/${tab.toLowerCase()}`);
     setIsMenuOpen(false);
   }
   return (

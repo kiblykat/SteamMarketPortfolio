@@ -6,14 +6,11 @@ import { formatDate } from "../utils/utils";
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const { isLoggedIn, setActiveTab, balance } = globalContext;
+  const { setActiveTab, balance } = globalContext;
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/");
-    }
     setActiveTab("Home");
-  }, [isLoggedIn, navigate, setActiveTab]);
+  }, [navigate, setActiveTab]);
 
   return (
     <>
@@ -52,13 +49,13 @@ const Home = () => {
                           <td>{formatDate(transaction.date)}</td>
                           <td
                             className={
-                              transaction.amount > 0
+                              transaction.price > 0
                                 ? "text-success"
                                 : "text-error"
                             }
                           >
-                            {transaction.amount > 0 ? "+" : "-"}$
-                            {Math.abs(transaction.amount).toFixed(2)}
+                            {transaction.price > 0 ? "+" : "-"}$
+                            {Math.abs(transaction.price).toFixed(2)}
                           </td>
                         </tr>
                       ))}
