@@ -27,7 +27,7 @@ const Transfer = () => {
                 onClick={() => navigate("/transfer/deposit")}
                 className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
               >
-                <i className="text-3xl text-blue-800 fa-solid fa-arrow-right p-7"></i>
+                <i className="text-3xl text-gray-800 fa-solid fa-arrow-right p-7"></i>
                 <div>
                   <p className="font-bold mt-3">Deposit money</p>
                   <div className="text-xs">
@@ -42,7 +42,7 @@ const Transfer = () => {
                 onClick={() => navigate("/transfer/withdraw")}
                 className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
               >
-                <i className="text-3xl text-blue-800 fa-solid fa-arrow-left p-7"></i>
+                <i className="text-3xl text-gray-800 fa-solid fa-arrow-left p-7"></i>
                 <div>
                   <p className="font-bold mt-3">Withdraw money</p>
                   <div className="text-xs">

@@ -15,7 +15,7 @@ const Statement = () => {
     <>
       <div className="bg-stone-100 h-full">
         <div className="flex flex-row justify-center">
-          <div className="bg-white overflow-y-auto w-full h-screen m-8 rounded-xl shadow-lg border-solid border-l-8 border-blue-300">
+          <div className="bg-white overflow-y-auto w-full h-screen m-8 rounded-xl shadow-lg border-solid border-l-8 border-gray-300">
             <div className="flex flex-row justify-between">
               <i
                 data-testid="back-button"
