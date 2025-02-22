@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useContext, useState } from "react";
 import GlobalContext from "../GlobalContext";
 
-const Tr_Deposit = () => {
+const Tr_Buy = () => {
   const [steamItem, setSteamItem] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
@@ -17,7 +17,7 @@ const Tr_Deposit = () => {
     }
   };
 
-  const handleDeposit = (): void => {
+  const handleBuy = (): void => {
     //check if the input matches a valid number format
     const isValidFormat = /^\d*\.?\d{0,2}$/.test(price);
 
@@ -46,7 +46,7 @@ const Tr_Deposit = () => {
     toast.success(
       `You have bought ${quantity} of ${steamItem} for ${price} each`
     );
-    navigate("/trade"); // navigate back to trade page after successful deposit
+    navigate("/trade"); // navigate back to trade page after successful buy
   };
 
   const navigate = useNavigate();
@@ -88,11 +88,11 @@ const Tr_Deposit = () => {
               />
             </div>
             <button
-              data-testid="deposit-button"
-              onClick={() => handleDeposit()}
+              data-testid="buy-button"
+              onClick={() => handleBuy()}
               className="btn rounded-full w-52 mb-16 bg-gray-900 text-white"
             >
-              Deposit
+              Buy
             </button>
           </div>
         </div>
@@ -101,4 +101,4 @@ const Tr_Deposit = () => {
   );
 };
 
-export default Tr_Deposit;
+export default Tr_Buy;

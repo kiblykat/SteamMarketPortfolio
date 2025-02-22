@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import Statement from "./pages/Statement";
 import Trade from "./pages/Trade";
 import Sidebar from "./components/Sidebar";
-import Tr_Deposit from "./pages/Tr_Deposit";
+import Tr_Buy from "./pages/Tr_Buy";
 import Tr_Withdraw from "./pages/Tr_Withdraw";
 import Navbar from "./components/Navbar";
 
@@ -16,7 +16,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/statement" element={<Statement />} />
         <Route path="/trade" element={<Trade />} />
-        <Route path="/trade/deposit" element={<Tr_Deposit />} />
+        <Route path="/trade/buy" element={<Tr_Buy />} />
         <Route path="/trade/withdraw" element={<Tr_Withdraw />} />
       </Routes>
     </HashRouter>
