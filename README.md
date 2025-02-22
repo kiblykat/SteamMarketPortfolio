@@ -8,7 +8,7 @@ This project implements a simple banking application utilizing a single-page web
 - withdrawing an amount
 - printing account statement
 
-I have structured this app so that a Navbar is available for easy navigation. The app starts with user being Logged Out. Simply click "LOG IN" on the top right to update the logged in state. No actual API is called for updating this state. <b>Depositing</b> and <b>Withdrawing</b> are done through the <u>Transfer</u> tab. <b>Printing account statements</b> is done through the <u>Statement</u> tab.
+I have structured this app so that a Navbar is available for easy navigation. The app starts with user being Logged Out. Simply click "LOG IN" on the top right to update the logged in state. No actual API is called for updating this state. <b>Depositing</b> and <b>Withdrawing</b> are done through the <u>Trade</u> tab. <b>Printing account statements</b> is done through the <u>Statement</u> tab.
 
 The Home Screen allows the user to quickly view their current balance and 3 most recent transactions. I have also included a hero screen when the "gic" logo is pressed, purely for stylistic purposes. The design is responsive for mobile screens as well, with an adaptive UI.
 

@@ -22,7 +22,7 @@ const Sidebar = () => {
       >
         <div className="flex flex-col p-4 space-y-6">
           <div className="flex flex-col space-y-4">
-            {(["Home", "Transfer", "Statement"] as const).map((tab) => (
+            {(["Home", "Trade", "Statement"] as const).map((tab) => (
               <button
                 onClick={() => handleTabChange(tab)}
                 key={tab}

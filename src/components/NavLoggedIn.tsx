@@ -50,12 +50,12 @@ const NavLoggedIn = () => {
               Home
             </button>
             <button
-              onClick={() => handleTabChange("Transfer")}
+              onClick={() => handleTabChange("Trade")}
               className={`font-semibold text-white border border-gray-900 hover:border-white/20 rounded-full opacity-80 hover:opacity-100 transition-opacity duration-300 text-xl p-2 px-4 mx-2 hidden md:block ${
-                activeTab == "Transfer" ? "bg-white/20 p-3" : ""
+                activeTab == "Trade" ? "bg-white/20 p-3" : ""
               }`}
             >
-              Transfer
+              Trade
             </button>
             <button
               onClick={() => handleTabChange("Statement")}

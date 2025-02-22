@@ -1,6 +1,6 @@
 export interface GlobalContextType {
   activeTab: string;
-  setActiveTab: (tab: "Landing" | "Home" | "Transfer" | "Statement") => void;
+  setActiveTab: (tab: "Landing" | "Home" | "Trade" | "Statement") => void;
   isMenuOpen: boolean;
   setIsMenuOpen: (bool: boolean) => void;
   balance: number;
@@ -31,4 +31,4 @@ export interface Transaction {
   balance: number;
 }
 
-export type Tabs = "Landing" | "Home" | "Transfer" | "Statement";
+export type Tabs = "Landing" | "Home" | "Trade" | "Statement";
