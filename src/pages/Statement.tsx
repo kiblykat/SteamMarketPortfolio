@@ -26,7 +26,7 @@ const Statement = () => {
                 Past Statements
               </h1>
 
-              <img src="/gic3.png" className="rounded-full w-8 h-8 m-4" />
+              <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />
             </div>
             <div className="mb-4 flex flex-col justify-center items-center"></div>
             <table className="table">
