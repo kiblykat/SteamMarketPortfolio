@@ -2,13 +2,13 @@ import { useContext, useEffect } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 
-const Transfer = () => {
+const Trade = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const { setActiveTab } = globalContext;
 
   useEffect(() => {
-    setActiveTab("Transfer");
+    setActiveTab("Trade");
   }, [navigate, setActiveTab]);
 
   return (
@@ -17,37 +17,29 @@ const Transfer = () => {
         <div className="flex flex-row justify-center w-screen h-screen">
           <div className="bg-white pt-8 rounded-lg shadow-md">
             <div className="flex flex-col mb-4 justify-center items-center">
-              <h1 className="text-xl font-semibold ">Transfer Money</h1>
+              <h1 className="text-xl font-semibold ">Trade</h1>
             </div>
             <div className="px-10 rounded-full">
-              <p className="font-bold block text-sm text-gray-700 mb-3">
-                Deposit
-              </p>
+              <p className="font-bold block text-sm text-gray-700 mb-3">Buy</p>
               <div
-                onClick={() => navigate("/transfer/deposit")}
+                onClick={() => navigate("/trade/deposit")}
                 className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
               >
                 <i className="text-3xl text-gray-800 fa-solid fa-arrow-right p-7"></i>
                 <div>
-                  <p className="font-bold mt-3">Deposit money</p>
-                  <div className="text-xs">
-                    Deposit funds into your bank account
-                  </div>
+                  <p className="font-bold mt-3">Buy items</p>
+                  <div className="text-xs">Buy items from the Steam Market</div>
                 </div>
               </div>
-              <p className="font-bold block text-sm text-gray-700 mb-3">
-                Withdraw
-              </p>
+              <p className="font-bold block text-sm text-gray-700 mb-3">Sell</p>
               <div
-                onClick={() => navigate("/transfer/withdraw")}
+                onClick={() => navigate("/trade/withdraw")}
                 className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
               >
                 <i className="text-3xl text-gray-800 fa-solid fa-arrow-left p-7"></i>
                 <div>
-                  <p className="font-bold mt-3">Withdraw money</p>
-                  <div className="text-xs">
-                    Withdraw funds out of your bank account
-                  </div>
+                  <p className="font-bold mt-3">Sell items</p>
+                  <div className="text-xs">Sell items to the Steam Market</div>
                 </div>
               </div>
             </div>
@@ -58,4 +50,4 @@ const Transfer = () => {
   );
 };
 
-export default Transfer;
+export default Trade;

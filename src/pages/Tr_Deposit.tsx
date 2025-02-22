@@ -46,7 +46,7 @@ const Tr_Deposit = () => {
     toast.success(
       `You have bought ${quantity} of ${steamItem} for ${price} each`
     );
-    navigate("/transfer"); // navigate back to transfer page after successful deposit
+    navigate("/trade"); // navigate back to trade page after successful deposit
   };
 
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const Tr_Deposit = () => {
           <div className="flex flex-row justify-between">
             <i
               data-testid="back-button"
-              onClick={() => navigate("/transfer")}
+              onClick={() => navigate("/trade")}
               className="m-3 p-3 fa-solid fa-arrow-left text-xl rounded-full hover:bg-gray-100 hover:cursor-pointer"
             ></i>
             <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />

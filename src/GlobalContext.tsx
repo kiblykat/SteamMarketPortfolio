@@ -11,7 +11,7 @@ const GlobalContext = createContext<GlobalContextType>(initialGlobalState);
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<
-    "Landing" | "Home" | "Transfer" | "Statement"
+    "Landing" | "Home" | "Trade" | "Statement"
   >("Landing");
 
   const [balance, setBalance] = useState<number>(0);
