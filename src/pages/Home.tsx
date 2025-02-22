@@ -25,7 +25,7 @@ const Home = () => {
                 onClick={() => navigate("/trade")}
                 className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"
               >
-                Trade Funds
+                New trade
               </button>
             </div>
           </div>
