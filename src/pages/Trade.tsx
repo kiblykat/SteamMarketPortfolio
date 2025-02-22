@@ -22,7 +22,7 @@ const Trade = () => {
             <div className="px-10 rounded-full">
               <p className="font-bold block text-sm text-gray-700 mb-3">Buy</p>
               <div
-                onClick={() => navigate("/trade/deposit")}
+                onClick={() => navigate("/trade/buy")}
                 className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
               >
                 <i className="text-3xl text-gray-800 fa-solid fa-arrow-right p-7"></i>

@@ -34,7 +34,7 @@ const Tr_Withdraw = () => {
       ...transactions,
       {
         date: new Date(),
-        amount: -withdrawAmount,
+        price: -withdrawAmount,
         balance: newBalance,
       },
     ]);
@@ -42,7 +42,7 @@ const Tr_Withdraw = () => {
     toast.success(
       `$${withdrawAmount.toFixed(2)} has been withdrawn from your account`
     );
-    navigate("/trade"); // navigate back to trade page after successful deposit
+    navigate("/trade"); // navigate back to trade page after successful buy
   };
 
   const navigate = useNavigate();
