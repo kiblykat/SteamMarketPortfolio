@@ -8,8 +8,14 @@ const Tr_Buy = () => {
   const [steamItem, setSteamItem] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { balance, setBalance, transactions, setTransactions } =
     useContext(GlobalContext);
+
+  const handleSteamItem = (item: string): void => {
+    setSteamItem(item);
+    setIsOpen(false);
+  };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -70,25 +76,25 @@ const Tr_Buy = () => {
             </div>
             <div className="flex flex-col md:flex-row items-center justify-center">
               <div className="flex flex-row items-center justify-center m-2">
-                {/* Input field */}
-                <input
-                  placeholder="Item"
-                  value={steamItem}
-                  className="py-2 input border border-gray-300 rounded-l-xl text-xl md:w-48"
-                />
-
                 {/* Dropdown */}
-                <div className="dropdown">
-                  <button className="btn btn-primary">Select Item</button>
-                  <ul className="dropdown-content menu shadow bg-base-100 rounded-box md:w-48">
-                    {marketItems.map((item) => (
-                      <li key={item}>
-                        <button onClick={() => setSteamItem(item)}>
-                          {item}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="dropdown text-center">
+                  <button
+                    className="btn btn-secondary text-white w-40 rounded-lg text-center"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    {steamItem || "Select Item"}
+                  </button>
+                  {isOpen && (
+                    <ul className="dropdown-content menu shadow bg-base-100 rounded-box md:w-48">
+                      {marketItems.map((item) => (
+                        <li key={item}>
+                          <button onClick={() => handleSteamItem(item)}>
+                            {item}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
               <div className="m-2">
