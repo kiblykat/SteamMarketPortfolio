@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useContext, useState } from "react";
 import GlobalContext from "../GlobalContext";
+import { marketItems } from "../types/globalContextTypes";
 
 const Tr_Buy = () => {
   const [steamItem, setSteamItem] = useState<string>("");
@@ -68,24 +69,46 @@ const Tr_Buy = () => {
               <i className="text-3xl text-gray-800 fa-solid fa-circle-arrow-right p-2"></i>
             </div>
             <div className="flex flex-row items-center justify-center m-8">
-              <input
-                placeholder="Item"
-                value={steamItem}
-                onChange={(e) => setSteamItem(e.target.value)}
-                className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
-              />
-              <input
-                placeholder="Price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
-              />
-              <input
-                placeholder="Quantity"
-                value={quantity}
-                onChange={(e) => handleQuantityChange(e)}
-                className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
-              />
+              <div className="flex flex-row items-center justify-center m-2">
+                {/* Input field */}
+                <input
+                  placeholder="Item"
+                  value={steamItem}
+                  onChange={(e) => setSteamItem(e.target.value)}
+                  className="py-2 input border border-gray-300 rounded-l-xl text-xl w-48"
+                />
+
+                {/* Dropdown */}
+                <div className="dropdown">
+                  <button className="btn btn-primary">Select Item</button>
+                  <ul className="dropdown-content menu shadow bg-base-100 rounded-box w-48">
+                    {marketItems.map((item) => (
+                      <li key={item}>
+                        <button onClick={() => setSteamItem(item)}>
+                          {item}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="m-2">
+                <input
+                  placeholder="Price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
+                />
+              </div>
+              <div className="m-2">
+                {" "}
+                <input
+                  placeholder="Quantity"
+                  value={quantity}
+                  onChange={(e) => handleQuantityChange(e)}
+                  className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
+                />
+              </div>
             </div>
             <button
               data-testid="buy-button"

@@ -32,3 +32,5 @@ export interface Transaction {
 }
 
 export type Tabs = "Landing" | "Home" | "Trade" | "Statement";
+
+export const marketItems = ["Fracture Case", "Prisma Case", "Clutch Case"];
