@@ -52,9 +52,9 @@ const Tr_Buy = () => {
 
   const navigate = useNavigate();
   return (
-    <div className="bg-stone-100 h-full">
+    <div className="bg-stone-100 h-screen">
       <div className="flex flex-row justify-center">
-        <div className="flex flex-col bg-white shadow-lg m-8 rounded-lg border-l-8 border-solid border-gray-300">
+        <div className="flex flex-col bg-white shadow-lg md:m-8 rounded-lg border-l-8 border-solid border-gray-300">
           <div className="flex flex-row justify-between">
             <i
               data-testid="back-button"
@@ -68,20 +68,19 @@ const Tr_Buy = () => {
               <p className="text-center text-2xl font-bold">Buy Steam Items</p>
               <i className="text-3xl text-gray-800 fa-solid fa-circle-arrow-right p-2"></i>
             </div>
-            <div className="flex flex-row items-center justify-center m-8">
+            <div className="flex flex-col md:flex-row items-center justify-center">
               <div className="flex flex-row items-center justify-center m-2">
                 {/* Input field */}
                 <input
                   placeholder="Item"
                   value={steamItem}
-                  onChange={(e) => setSteamItem(e.target.value)}
-                  className="py-2 input border border-gray-300 rounded-l-xl text-xl w-48"
+                  className="py-2 input border border-gray-300 rounded-l-xl text-xl md:w-48"
                 />
 
                 {/* Dropdown */}
                 <div className="dropdown">
                   <button className="btn btn-primary">Select Item</button>
-                  <ul className="dropdown-content menu shadow bg-base-100 rounded-box w-48">
+                  <ul className="dropdown-content menu shadow bg-base-100 rounded-box md:w-48">
                     {marketItems.map((item) => (
                       <li key={item}>
                         <button onClick={() => setSteamItem(item)}>
@@ -97,16 +96,15 @@ const Tr_Buy = () => {
                   placeholder="Price"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
-                  className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
+                  className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
                 />
               </div>
               <div className="m-2">
-                {" "}
                 <input
                   placeholder="Quantity"
                   value={quantity}
                   onChange={(e) => handleQuantityChange(e)}
-                  className="py-10 input border border-gray-300 rounded-xl text-xl w-48"
+                  className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
                 />
               </div>
             </div>
