@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="bg-stone-100 h-full">
+      <div className="bg-stone-100 h-screen">
         <div className="grid grid-cols-4">
           <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-2 mx-12 md:ml-12 md:mr-4 mt-12 border border-gray-300">
             <div className="card-body">
