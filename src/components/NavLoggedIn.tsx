@@ -38,7 +38,7 @@ const NavLoggedIn = () => {
             {/* End Mobile Screen Burger */}
             {/* Right Tabs */}
             <img
-              src="gic3.png"
+              src="steam.png"
               className="min-w-16 w-16 rounded-full cursor-pointer"
             ></img>
             <button

@@ -60,7 +60,7 @@ const Tr_Deposit = () => {
               onClick={() => navigate("/transfer")}
               className="m-3 p-3 fa-solid fa-arrow-left text-xl rounded-full hover:bg-gray-100 hover:cursor-pointer"
             ></i>
-            <img src="/gic3.png" className="rounded-full w-8 h-8 m-4" />
+            <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />
           </div>
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-row items-center justify-center m-5 mb-2">
