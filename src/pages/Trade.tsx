@@ -17,7 +17,7 @@ const Trade = () => {
         <div className="flex flex-row justify-center w-screen h-screen">
           <div className="bg-white pt-8 rounded-lg shadow-md">
             <div className="flex flex-col mb-4 justify-center items-center">
-              <h1 className="text-xl font-semibold ">Trade</h1>
+              <h1 className="text-xl font-semibold ">Market Trade</h1>
             </div>
             <div className="px-10 rounded-full">
               <p className="font-bold block text-sm text-gray-700 mb-3">Buy</p>
