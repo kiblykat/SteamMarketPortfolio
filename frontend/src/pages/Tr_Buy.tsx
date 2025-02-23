@@ -3,10 +3,11 @@ import toast from "react-hot-toast";
 import { useContext, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { marketItems } from "../types/globalContextTypes";
+import transactionAPI from "../api/api";
 
 const Tr_Buy = () => {
   const [steamItem, setSteamItem] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { balance, setBalance, transactions, setTransactions } =
@@ -24,36 +25,43 @@ const Tr_Buy = () => {
     }
   };
 
-  const handleBuy = (): void => {
+  const handleBuy = async (): Promise<void> => {
     //check if the input matches a valid number format
-    const isValidFormat = /^\d*\.?\d{0,2}$/.test(price);
+    const isValidFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
 
     if (!isValidFormat) {
       toast.error("Please enter a valid price");
       return;
     }
 
-    const depositAmount = parseFloat(price);
-    if (isNaN(depositAmount) || depositAmount <= 0) {
+    const price = parseFloat(strPrice);
+    if (isNaN(price) || price <= 0) {
       toast.error("Please enter a valid price");
       return;
     }
 
-    const newBalance = balance + depositAmount;
+    await transactionAPI.post("transactions/create", {
+      uid: "placeholder",
+      steamItem,
+      price,
+      quantity,
+    });
+
+    const newBalance = balance + price;
     setBalance(newBalance);
     setTransactions([
       ...transactions,
       {
         date: new Date(),
-        price: depositAmount,
+        price: price,
         balance: newBalance,
       },
     ]);
 
     toast.success(
-      `You have bought ${quantity} of ${steamItem} for ${price} each`
+      `You have bought ${quantity} ${steamItem}s for $${price} each`
     );
-    navigate("/trade"); // navigate back to trade page after successful buy
+    // navigate("/trade"); // navigate back to trade page after successful buy
   };
 
   const navigate = useNavigate();
@@ -100,8 +108,8 @@ const Tr_Buy = () => {
               <div className="m-2">
                 <input
                   placeholder="Price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
+                  value={strPrice}
+                  onChange={(e) => setStrPrice(e.target.value)}
                   className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
                 />
               </div>
