@@ -10,8 +10,7 @@ const Tr_Buy = () => {
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { balance, setBalance, transactions, setTransactions } =
-    useContext(GlobalContext);
+  const { balance, setBalance } = useContext(GlobalContext);
 
   const handleSteamItem = (item: string): void => {
     setSteamItem(item);
@@ -27,9 +26,9 @@ const Tr_Buy = () => {
 
   const handleBuy = async (): Promise<void> => {
     //check if the input matches a valid number format
-    const isValidFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
+    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
 
-    if (!isValidFormat) {
+    if (!isValidPriceFormat) {
       toast.error("Please enter a valid price");
       return;
     }
@@ -49,14 +48,6 @@ const Tr_Buy = () => {
 
     const newBalance = balance + price;
     setBalance(newBalance);
-    setTransactions([
-      ...transactions,
-      {
-        date: new Date(),
-        price: price,
-        balance: newBalance,
-      },
-    ]);
 
     toast.success(
       `You have bought ${quantity} ${steamItem}s for $${price} each`
