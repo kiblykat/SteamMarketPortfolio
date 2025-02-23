@@ -26,9 +26,11 @@ export interface SlideInTextProps {
 }
 
 export interface Transaction {
-  date: Date;
+  steamItem: string;
   price: number;
   balance: number;
+  quantity: number;
+  date: string;
 }
 
 export type Tabs = "Landing" | "Home" | "Trade" | "Statement";

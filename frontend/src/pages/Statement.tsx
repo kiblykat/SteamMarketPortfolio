@@ -1,14 +1,24 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/utils";
+import transactionAPI from "../api/api";
+import { Transaction } from "../types/globalContextTypes";
 
 const Statement = () => {
   const navigate = useNavigate();
-  const { setActiveTab, transactions } = useContext(GlobalContext);
+  const { setActiveTab } = useContext(GlobalContext);
+
+  const [transactionData, setTransactionData] = useState<Transaction[]>([]);
 
   useEffect(() => {
     setActiveTab("Statement");
+    const fetchTransactions = async () => {
+      const response = await transactionAPI.get("/transactions/placeholder");
+      const data = response.data;
+      console.log(data);
+      setTransactionData(data);
+    };
+    fetchTransactions();
   }, [navigate, setActiveTab]);
 
   return (
@@ -33,23 +43,25 @@ const Statement = () => {
               <thead>
                 <tr>
                   <th className="text-sm">Date</th>
-                  <th className="text-sm">Amount</th>
-                  <th className="text-sm">Balance</th>
+                  <th className="text-sm">Name</th>
+                  <th className="text-sm">Price</th>
+                  <th className="text-sm">Quantity</th>
                 </tr>
               </thead>
               <tbody>
-                {transactions.map((transaction, index) => (
+                {transactionData.map((transaction, index) => (
                   <tr key={index}>
-                    <td>{formatDate(transaction.date)}</td>
+                    <td>{transaction.date.replace(/T.*/, "")}</td>
+                    <td>{transaction.steamItem}</td>
                     <td
                       className={
-                        transaction.price > 0 ? "text-success" : "text-error"
+                        transaction.price < 0 ? "text-success" : "text-error"
                       }
                     >
-                      {transaction.price > 0 ? "+" : "-"}$
+                      {transaction.price < 0 ? "+" : "-"}$
                       {Math.abs(transaction.price).toFixed(2)}
                     </td>
-                    <td>${transaction.balance.toFixed(2)}</td>
+                    <td> {transaction.quantity}</td>
                   </tr>
                 ))}
               </tbody>
