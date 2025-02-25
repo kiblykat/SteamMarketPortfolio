@@ -112,35 +112,48 @@ export const deleteTransaction = async (
 };
 
 // Get Average Price of steamItem for a user
-export const getAveragePrice = async (req: Request, res: Response) => {
+export const getAveragePrices = async (req: Request, res: Response) => {
   try {
-    const { uid, steamItem } = req.query;
+    const { uid } = req.query;
 
-    if (!uid || !steamItem) {
-      res.status(400).json({ message: "Missing uid or steamItem" });
+    if (!uid) {
+      res.status(400).json({ message: "Missing uid" });
       return;
     }
+
     const result = await transactionModel.aggregate([
       {
         $match: {
-          uid: String(uid),
-          steamItem: String(steamItem),
+          uid: String(uid), // Only match transactions for the specified user
         },
       },
       {
         $group: {
-          _id: null,
-          averagePrice: { $avg: "$price" },
+          _id: "$steamItem", // Group by steamItem
+          averagePrice: { $avg: "$price" }, // Calculate the average price for each steamItem
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Remove the _id field from the response
+          steamItem: "$_id", // Rename _id to steamItem
+          averagePrice: 1, // Include the averagePrice field
         },
       },
     ]);
 
     if (result.length === 0) {
-      res.status(404).json({ message: "No transactions found" });
+      res.status(404).json({ message: "No transactions found for this user" });
       return;
     }
 
-    res.status(200).json({ averagePrice: result[0].averagePrice });
+    // Format the result as an object where keys are steamItem names
+    const averagePrices = result.reduce((acc: Record<string, number>, item) => {
+      acc[item.steamItem] = item.averagePrice;
+      return acc;
+    }, {});
+
+    res.status(200).json(averagePrices);
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });
