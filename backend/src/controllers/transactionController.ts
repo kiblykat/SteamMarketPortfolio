@@ -110,3 +110,42 @@ export const deleteTransaction = async (
     res.status(500).json({ message: "Error deleting transaction", error });
   }
 };
+
+// Get Average Price of steamItem for a user
+export const getAveragePrice = async (req: Request, res: Response) => {
+  try {
+    const { uid, steamItem } = req.query;
+
+    if (!uid || !steamItem) {
+      res.status(400).json({ message: "Missing uid or steamItem" });
+      return;
+    }
+    const result = await transactionModel.aggregate([
+      {
+        $match: {
+          uid: String(uid),
+          steamItem: String(steamItem),
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          averagePrice: { $avg: "$price" },
+        },
+      },
+    ]);
+
+    if (result.length === 0) {
+      res.status(404).json({ message: "No transactions found" });
+      return;
+    }
+
+    res.status(200).json({ averagePrice: result[0].averagePrice });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "An unknown error occurred" });
+    }
+  }
+};
