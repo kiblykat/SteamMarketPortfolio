@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/utils";
 import transactionAPI from "../api/api";
 
 const Home = () => {
@@ -71,7 +70,7 @@ const Home = () => {
                       .slice(0, 3)
                       .map((transaction, index) => (
                         <tr key={index}>
-                          <td>{formatDate(transaction.date)}</td>
+                          <td>{transaction.date.replace(/T.*/, "")}</td>
                           <td
                             className={
                               transaction.price > 0
