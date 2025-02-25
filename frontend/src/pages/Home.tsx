@@ -7,14 +7,16 @@ import transactionAPI from "../api/api";
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab, currentSteamPrices, setCurrentSteamPrices, balance } =
+  const { setActiveTab, currentSteamPrices, setCurrentSteamPrices } =
     globalContext;
-  const [profit, setProfit] = useState<number>(0);
-  const [fractureCasePrice, setFractureCasePrice] = useState<number>(0);
+  // const [profit, setProfit] = useState<number>(0);
+  const [averagePrices, setAveragePrices] = useState<{
+    [key: string]: number;
+  }>({});
 
   useEffect(() => {
     setActiveTab("Home");
-    const calculateSteamAndAvgPrice = async () => {
+    const getSteamAndAvgPrice = async () => {
       // Retrieve current steam prices
       const currentSteamPricesResponse = await transactionAPI.get(
         "/steamPrices/currentSteamPrices"
@@ -23,12 +25,12 @@ const Home = () => {
         fractureCase: currentSteamPricesResponse.data.fractureCase,
       });
       // Retrieve average price of each case
-      const fractureCasePriceResponse = await transactionAPI.get(
-        "/transactions/average-prices?uid=placeholder&steamItem=fracture-case"
+      const averagePricesResponse = await transactionAPI.get(
+        "/transactions/average-prices?uid=placeholder"
       );
-      setFractureCasePrice(fractureCasePriceResponse.data.averagePrice);
+      setAveragePrices(averagePricesResponse.data);
     };
-    calculateSteamAndAvgPrice();
+    getSteamAndAvgPrice();
   }, [navigate, setActiveTab, setCurrentSteamPrices]);
 
   return (
@@ -40,7 +42,9 @@ const Home = () => {
               <div className="card-title">Steam Profit</div>
               <hr></hr>
               <h1 className=" text-6xl font-semibold">
-                ${currentSteamPrices.fractureCase / 100 - fractureCasePrice}
+                $
+                {currentSteamPrices.fractureCase / 100 -
+                  averagePrices.fractureCase || 0}
               </h1>
               <button
                 onClick={() => navigate("/trade")}
