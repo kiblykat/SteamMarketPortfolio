@@ -13,8 +13,13 @@ const Tr_Buy = () => {
   const { balance, setBalance } = useContext(GlobalContext);
 
   const handleSteamItem = (item: string): void => {
-    const itemHyphenated = item.toLowerCase().replace(/\s+/g, "-");
-    setSteamItem(itemHyphenated); //pass item as hyphenated lower-case string for easy query on backend
+    const itemCamelCase = item
+      .toLowerCase()
+      .replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
+        index === 0 ? match.toLowerCase() : match.toUpperCase()
+      )
+      .replace(" ", "");
+    setSteamItem(itemCamelCase); //pass item as camelCased string for easy query on backend
     setIsOpen(false);
   };
 
