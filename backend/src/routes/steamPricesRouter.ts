@@ -1,8 +1,8 @@
 import express from "express";
-import { getFractureCasePrice } from "../controllers/steamPricesController";
+import { getCasePrices } from "../controllers/steamPricesController";
 
 const steamPriceRouter = express.Router();
 
-steamPriceRouter.get("/fractureCase", getFractureCasePrice);
+steamPriceRouter.get("/casePrices", getCasePrices);
 
 export default steamPriceRouter;
