@@ -130,14 +130,16 @@ export const getAveragePrices = async (req: Request, res: Response) => {
       {
         $group: {
           _id: "$steamItem", // Group by steamItem
-          averagePrice: { $avg: "$price" }, // Calculate the average price for each steamItem
+          totalPrice: { $sum: { $multiply: ["$price", "$quantity"] } }, // Sum of price * quantity
+          totalQuantity: { $sum: "$quantity" }, // Sum of quantities
         },
       },
       {
         $project: {
           _id: 0, // Remove the _id field from the response
           steamItem: "$_id", // Rename _id to steamItem
-          averagePrice: 1, // Include the averagePrice field
+          averagePrice: { $divide: ["$totalPrice", "$totalQuantity"] }, // Calculate average price
+          totalQuantity: 1, // Include total quantity
         },
       },
     ]);
@@ -148,10 +150,19 @@ export const getAveragePrices = async (req: Request, res: Response) => {
     }
 
     // Format the result as an object where keys are steamItem names
-    const averagePrices = result.reduce((acc: Record<string, number>, item) => {
-      acc[item.steamItem] = item.averagePrice;
-      return acc;
-    }, {});
+    const averagePrices = result.reduce(
+      (
+        acc: Record<string, { averagePrice: number; totalQuantity: number }>,
+        item
+      ) => {
+        acc[item.steamItem] = {
+          averagePrice: item.averagePrice,
+          totalQuantity: item.totalQuantity,
+        };
+        return acc;
+      },
+      {}
+    );
 
     res.status(200).json(averagePrices);
   } catch (error) {
