@@ -1,16 +1,35 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/utils";
+import transactionAPI from "../api/api";
 
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab, balance } = globalContext;
+  const { setActiveTab, currentSteamPrices, setCurrentSteamPrices, balance } =
+    globalContext;
+  const [profit, setProfit] = useState<number>(0);
+  const [fractureCasePrice, setFractureCasePrice] = useState<number>(0);
 
   useEffect(() => {
     setActiveTab("Home");
-  }, [navigate, setActiveTab]);
+    const calculateSteamAndAvgPrice = async () => {
+      // Retrieve current steam prices
+      const currentSteamPricesResponse = await transactionAPI.get(
+        "/steamPrices/currentSteamPrices"
+      );
+      setCurrentSteamPrices({
+        fractureCase: currentSteamPricesResponse.data.fractureCase,
+      });
+      // Retrieve average price of each case
+      const fractureCasePriceResponse = await transactionAPI.get(
+        "/transactions/average-prices?uid=placeholder&steamItem=fracture-case"
+      );
+      setFractureCasePrice(fractureCasePriceResponse.data.averagePrice);
+    };
+    calculateSteamAndAvgPrice();
+  }, [navigate, setActiveTab, setCurrentSteamPrices]);
 
   return (
     <>
@@ -20,7 +39,9 @@ const Home = () => {
             <div className="card-body">
               <div className="card-title">Steam Profit</div>
               <hr></hr>
-              <h1 className=" text-6xl font-semibold">${balance.toFixed(2)}</h1>
+              <h1 className=" text-6xl font-semibold">
+                ${currentSteamPrices.fractureCase / 100 - fractureCasePrice}
+              </h1>
               <button
                 onClick={() => navigate("/trade")}
                 className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"

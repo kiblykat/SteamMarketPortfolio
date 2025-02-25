@@ -7,8 +7,10 @@ export interface GlobalContextType {
   setBalance: (balance: number) => void;
   transactions: Transaction[];
   setTransactions: (transactions: Transaction[]) => void;
-  casePrices: number;
-  setCasePrices: (price: number) => void;
+  currentSteamPrices: { [key: string]: number };
+  setCurrentSteamPrices: (currentSteamPrices: {
+    [key: string]: number;
+  }) => void;
 }
 
 export const initialGlobalState: GlobalContextType = {
@@ -20,8 +22,8 @@ export const initialGlobalState: GlobalContextType = {
   setBalance: () => {},
   transactions: [],
   setTransactions: () => {},
-  casePrices: 0,
-  setCasePrices: () => {},
+  currentSteamPrices: {},
+  setCurrentSteamPrices: () => {},
 };
 
 export interface SlideInTextProps {

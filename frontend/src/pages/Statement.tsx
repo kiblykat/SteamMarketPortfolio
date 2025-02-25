@@ -3,11 +3,10 @@ import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import transactionAPI from "../api/api";
 import { Transaction } from "../types/globalContextTypes";
-import axios from "axios";
 
 const Statement = () => {
   const navigate = useNavigate();
-  const { setActiveTab, casePrices, setCasePrices } = useContext(GlobalContext);
+  const { setActiveTab, setCurrentSteamPrices } = useContext(GlobalContext);
 
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
 
@@ -19,13 +18,13 @@ const Statement = () => {
       console.log(data);
       setTransactionData(data);
       const casePricesResponse = await transactionAPI.get(
-        "/steamPrices/casePrices"
+        "/steamPrices/currentSteamPrices"
       );
-      setCasePrices(casePricesResponse.data.fractureCase);
+      setCurrentSteamPrices(casePricesResponse.data.fractureCase);
       console.log(casePricesResponse.data.fractureCase);
     };
     fetchTransactions();
-  }, [navigate, setActiveTab, setCasePrices]);
+  }, [navigate, setActiveTab, setCurrentSteamPrices]);
 
   return (
     <>

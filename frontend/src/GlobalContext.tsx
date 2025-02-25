@@ -14,7 +14,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     "Landing" | "Home" | "Trade" | "Statement"
   >("Landing");
 
-  const [casePrices, setCasePrices] = useState<number>(0);
+  const [currentSteamPrices, setCurrentSteamPrices] = useState<number>(0);
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
@@ -27,8 +27,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setBalance,
     transactions,
     setTransactions,
-    casePrices,
-    setCasePrices,
+    currentSteamPrices,
+    setCurrentSteamPrices,
   };
 
   return (

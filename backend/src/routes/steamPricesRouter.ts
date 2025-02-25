@@ -3,6 +3,6 @@ import { getCasePrices } from "../controllers/steamPricesController";
 
 const steamPriceRouter = express.Router();
 
-steamPriceRouter.get("/casePrices", getCasePrices);
+steamPriceRouter.get("/currentSteamPrices", getCasePrices);
 
 export default steamPriceRouter;
