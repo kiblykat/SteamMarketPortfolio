@@ -6,11 +6,16 @@ import transactionAPI from "../api/api";
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab, currentSteamPrices, setCurrentSteamPrices } =
-    globalContext;
+  const { setActiveTab } = globalContext;
   // const [profit, setProfit] = useState<number>(0);
-  const [averagePrices, setAveragePrices] = useState<{
-    [key: string]: number;
+  const [averagePricesQty, setAveragePriceQty] = useState<{
+    [key: string]: {
+      averagePrice: number;
+      totalQuantity: number;
+    };
+  }>({});
+  const [currentSteamPrices, setCurrentSteamPrices] = useState<{
+    [key: string]: string;
   }>({});
 
   useEffect(() => {
@@ -22,15 +27,41 @@ const Home = () => {
       );
       setCurrentSteamPrices({
         fractureCase: currentSteamPricesResponse.data.fractureCase,
+        prismaCase: currentSteamPricesResponse.data.prismaCase,
+        clutchCase: currentSteamPricesResponse.data.clutchCase,
       });
       // Retrieve average price of each case
       const averagePricesResponse = await transactionAPI.get(
         "/transactions/average-prices?uid=placeholder"
       );
-      setAveragePrices(averagePricesResponse.data);
+      setAveragePriceQty(averagePricesResponse.data);
     };
     getSteamAndAvgPrice();
   }, [navigate, setActiveTab, setCurrentSteamPrices]);
+
+  const calculateProfit = (): number => {
+    let totalProfit = 0;
+    console.log(
+      `Current Steam Prices: ${JSON.stringify(currentSteamPrices.clutchCase)}`
+    );
+    // Loop through each item in averagePricesQty
+    for (const steamItem in averagePricesQty) {
+      const currentPrice = parseFloat(currentSteamPrices[steamItem]) / 100;
+      console.log(`Current Price: ${currentPrice}`);
+      const averagePrice = averagePricesQty[steamItem].averagePrice;
+      console.log(`Average Price: ${averagePrice}`);
+      const totalQuantity = averagePricesQty[steamItem].totalQuantity;
+      console.log(`Total Quantity: ${totalQuantity}`);
+
+      // Calculate profit for each steamItem and add it to the totalProfit
+      const profit =
+        currentPrice * totalQuantity - averagePrice * totalQuantity;
+      totalProfit += profit;
+    }
+
+    console.log(totalProfit);
+    return totalProfit;
+  };
 
   return (
     <>
@@ -40,11 +71,7 @@ const Home = () => {
             <div className="card-body">
               <div className="card-title">Steam Profit</div>
               <hr></hr>
-              <h1 className=" text-6xl font-semibold">
-                $
-                {currentSteamPrices.fractureCase / 100 -
-                  averagePrices.fractureCase || 0}
-              </h1>
+              <h1 className=" text-6xl font-semibold">${calculateProfit()}</h1>
               <button
                 onClick={() => navigate("/trade")}
                 className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"
