@@ -1,14 +1,15 @@
 import mongoose from "mongoose";
 
-const transactionSchema = new mongoose.Schema({
+const TransactionSchema = new mongoose.Schema({
   uid: { type: String, required: true },
-  steamItem: { type: String, required: true },
-  price: { type: Number, required: true },
+  itemName: { type: String, required: true }, // Group items by name
   quantity: { type: Number, required: true },
-  date: { type: Date, default: Date.now },
+  price: { type: Number, required: true }, // Purchase or sale price per unit
+  type: { type: String, enum: ["BUY", "SELL"], required: true }, // Tracks if it’s a buy or sell action
+  date: { type: Date, required: true },
 });
 
-export const transactionModel = mongoose.model(
+export const Transaction = mongoose.model(
   "Transaction",
-  transactionSchema
+  TransactionSchema
 );
