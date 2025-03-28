@@ -1,0 +1,4 @@
+==== CURRENT PRICES ENDPOINTS ====
+Fracture Case: https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Fracture%20Case
+Prisma Case: https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case
+Clutch Case: https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Clutch%20Case 
