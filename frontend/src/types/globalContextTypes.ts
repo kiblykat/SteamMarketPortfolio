@@ -32,7 +32,7 @@ export interface SlideInTextProps {
 }
 
 export interface Transaction {
-  steamItem: string;
+  itemName: string;
   price: number;
   balance: number;
   quantity: number;

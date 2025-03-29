@@ -57,7 +57,7 @@ const Statement = () => {
                 {transactionData.map((transaction, index) => (
                   <tr key={index}>
                     <td>{transaction.date.replace(/T.*/, "")}</td>
-                    <td>{transaction.steamItem}</td>
+                    <td>{transaction.itemName}</td>
                     <td
                       className={
                         transaction.price < 0 ? "text-success" : "text-error"
