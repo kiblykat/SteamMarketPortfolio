@@ -46,7 +46,7 @@ const Home = () => {
     );
     // Loop through each item in averagePricesQty
     for (const steamItem in averagePricesQty) {
-      const currentPrice = parseFloat(currentSteamPrices[steamItem]) / 100;
+      const currentPrice = parseFloat(currentSteamPrices[steamItem]);
       console.log(`Current Price: ${currentPrice}`);
       const averagePrice = averagePricesQty[steamItem].averagePrice;
       console.log(`Average Price: ${averagePrice}`);

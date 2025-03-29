@@ -2,21 +2,23 @@ import axios from "axios";
 import { Request, Response } from "express";
 
 export const getCasePrices = async (req: Request, res: Response) => {
+  //why does this function get called twice?
   try {
     const fractureCaseResponse = await axios.get(
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176185874"
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Fracture%20Case"
     );
     const prismaCaseResponse = await axios.get(
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176042493"
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case"
     );
     const clutchCaseResponse = await axios.get(
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=175966708"
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Clutch%20Case"
     );
     res.status(200).json({
-      fractureCase: fractureCaseResponse.data.highest_buy_order,
-      prismaCase: prismaCaseResponse.data.highest_buy_order,
-      clutchCase: clutchCaseResponse.data.highest_buy_order,
-    }); // highest_buy_order is the price of the most expensive buy order
+      fractureCase: parseFloat(fractureCaseResponse.data.median_price.replace("S$","")),
+      prismaCase: parseFloat(prismaCaseResponse.data.median_price.replace("S$","")),
+      clutchCase: parseFloat(clutchCaseResponse.data.median_price.replace("S$","")),
+    });
+
   } catch (error) {
     if (error instanceof Error) {
       res.status(500).json({ message: error.message });
