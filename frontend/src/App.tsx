@@ -17,7 +17,7 @@ function App() {
         <Route path="/statement" element={<Statement />} />
         <Route path="/trade" element={<Trade />} />
         <Route path="/trade/buy" element={<Tr_Buy />} />
-        <Route path="/trade/withdraw" element={<Tr_Sell />} />
+        <Route path="/trade/sell" element={<Tr_Sell />} />
       </Routes>
     </HashRouter>
   );
