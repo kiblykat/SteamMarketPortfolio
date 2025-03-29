@@ -49,6 +49,7 @@ const Statement = () => {
                 <tr>
                   <th className="text-sm">Date</th>
                   <th className="text-sm">Name</th>
+                  <th className="text-sm">Type</th>
                   <th className="text-sm">Price</th>
                   <th className="text-sm">Quantity</th>
                 </tr>
@@ -58,6 +59,7 @@ const Statement = () => {
                   <tr key={index}>
                     <td>{transaction.date.replace(/T.*/, "")}</td>
                     <td>{transaction.itemName}</td>
+                    <td>{transaction.type}</td>
                     <td
                       className={
                         transaction.price < 0 ? "text-success" : "text-error"

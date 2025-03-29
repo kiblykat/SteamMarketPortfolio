@@ -34,6 +34,7 @@ export interface SlideInTextProps {
 export interface Transaction {
   itemName: string;
   price: number;
+  type: string; // "BUY" or "SELL"
   balance: number;
   quantity: number;
   date: string;
