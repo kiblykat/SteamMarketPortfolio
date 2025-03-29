@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { transactionModel } from "../models/Transaction";
+import { Transaction } from "../models/Transaction";
 
 // Create Transaction
 export const createTransaction = async (
@@ -7,17 +7,18 @@ export const createTransaction = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { uid, steamItem, price, quantity } = req.body;
+    const { uid, steamItem, price, type, quantity } = req.body;
 
     if (!uid || !steamItem || !price || !quantity) {
       res.status(400).json({ message: "All fields are required" });
       return;
     }
 
-    const newTransaction = new transactionModel({
+    const newTransaction = new Transaction({
       uid,
-      steamItem,
+      itemName: steamItem,
       price,
+      type,
       quantity,
     });
     await newTransaction.save();
@@ -40,7 +41,7 @@ export const getAllTransactions = async (
       return;
     }
 
-    const transactions = await transactionModel.find({ uid });
+    const transactions = await Transaction.find({ uid });
 
     if (transactions.length === 0) {
       res.status(404).json({ message: "No transactions found" });
@@ -66,7 +67,7 @@ export const updateTransaction = async (
       return;
     }
 
-    const updatedTransaction = await transactionModel.findByIdAndUpdate(
+    const updatedTransaction = await Transaction.findByIdAndUpdate(
       transactionId,
       { price, quantity },
       { new: true, runValidators: true }
@@ -96,7 +97,7 @@ export const deleteTransaction = async (
       return;
     }
 
-    const deletedTransaction = await transactionModel.findByIdAndDelete(
+    const deletedTransaction = await Transaction.findByIdAndDelete(
       transactionId
     );
 
@@ -121,7 +122,7 @@ export const getAveragePrices = async (req: Request, res: Response) => {
       return;
     }
 
-    const result = await transactionModel.aggregate([
+    const result = await Transaction.aggregate([
       {
         $match: {
           uid: String(uid), // Only match transactions for the specified user

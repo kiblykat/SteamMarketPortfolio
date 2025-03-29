@@ -31,6 +31,7 @@ const Tr_Buy = () => {
   };
 
   const handleBuy = async (): Promise<void> => {
+    const type = "BUY"
     //check if the input matches a valid number format
     const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
 
@@ -46,9 +47,10 @@ const Tr_Buy = () => {
     }
 
     await transactionAPI.post("transactions/create", {
-      uid: "placeholder",
+      uid: "kiblykat",
       steamItem,
       price,
+      type,
       quantity,
     });
 
