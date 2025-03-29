@@ -5,7 +5,7 @@ import { marketItems } from "../types/globalContextTypes";
 import transactionAPI from "../api/api";
 
 
-const Tr_Withdraw = () => {
+const Tr_Sell = () => {
   const [steamItem, setSteamItem] = useState<string>("");
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
@@ -133,4 +133,4 @@ const Tr_Withdraw = () => {
   );
 };
 
-export default Tr_Withdraw;
+export default Tr_Sell;
