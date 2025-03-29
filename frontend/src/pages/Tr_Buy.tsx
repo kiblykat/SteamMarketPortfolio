@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useContext, useState } from "react";
-import GlobalContext from "../GlobalContext";
+import { useState } from "react";
 import { marketItems } from "../types/globalContextTypes";
 import transactionAPI from "../api/api";
 
@@ -10,7 +9,6 @@ const Tr_Buy = () => {
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { balance, setBalance } = useContext(GlobalContext);
 
   const handleSteamItem = (item: string): void => {
     const itemCamelCase = item
@@ -53,9 +51,6 @@ const Tr_Buy = () => {
       type,
       quantity,
     });
-
-    const newBalance = balance + price;
-    setBalance(newBalance);
 
     toast.success(
       `You have bought ${quantity} ${steamItem}s for $${price} each`
