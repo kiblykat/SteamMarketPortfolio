@@ -13,7 +13,7 @@ const Statement = () => {
   useEffect(() => {
     setActiveTab("Statement");
     const fetchTransactions = async () => {
-      const response = await transactionAPI.get("/transactions/placeholder");
+      const response = await transactionAPI.get("/transactions/kiblykat");
       const data = response.data;
       console.log(data);
       setTransactionData(data);
