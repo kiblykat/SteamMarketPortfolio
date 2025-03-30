@@ -7,7 +7,7 @@ export const createTransaction = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { uid, steamItem, price, type, quantity } = req.body;
+    const { uid, steamItem, price, type, quantity, date } = req.body;
 
     if (!uid || !steamItem || !price || !quantity) {
       res.status(400).json({ message: "All fields are required" });
@@ -20,6 +20,7 @@ export const createTransaction = async (
       price,
       type,
       quantity,
+      date: new Date(date) || new Date(), // Use provided date or current date
     });
     await newTransaction.save();
 
