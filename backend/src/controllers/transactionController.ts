@@ -42,7 +42,7 @@ export const getAllTransactions = async (
       return;
     }
 
-    const transactions = await Transaction.find({ uid });
+    const transactions = await Transaction.find({ uid }).sort({ date: -1 });
 
     if (transactions.length === 0) {
       res.status(404).json({ message: "No transactions found" });
