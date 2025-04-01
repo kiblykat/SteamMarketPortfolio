@@ -33,7 +33,7 @@ const Home = () => {
       });
       // Retrieve average price of each case
       const averagePricesResponse = await transactionAPI.get(
-        "/transactions/average-prices?uid=placeholder"
+        "/transactions/average-prices?uid=kiblykat"
       );
       setAveragePriceQty(averagePricesResponse.data);
     };
