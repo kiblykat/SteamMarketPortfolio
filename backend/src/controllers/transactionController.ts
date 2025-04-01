@@ -140,7 +140,7 @@ export const getAveragePrices = async (req: Request, res: Response) => {
         $project: {
           _id: 0, // Remove the _id field from the response
           steamItem: "$_id", // Rename _id to steamItem
-          averagePrice: { $divide: ["$totalPrice", "$totalQuantity"] }, // Calculate average price
+          avgPrice: { $divide: ["$totalPrice", "$totalQuantity"] }, // Calculate average price
           totalQuantity: 1, // Include total quantity
         },
       },
@@ -154,11 +154,11 @@ export const getAveragePrices = async (req: Request, res: Response) => {
     // Format the result as an object where keys are steamItem names
     const averagePrices = result.reduce(
       (
-        acc: Record<string, { averagePrice: number; totalQuantity: number }>,
+        acc: Record<string, { avgPrice: number; totalQuantity: number }>,
         item
       ) => {
         acc[item.steamItem] = {
-          averagePrice: item.averagePrice,
+          avgPrice: item.avgPrice,
           totalQuantity: item.totalQuantity,
         };
         return acc;
@@ -177,7 +177,7 @@ export const getAveragePrices = async (req: Request, res: Response) => {
 };
 
 // Generate Portfolio returns
-// [[itemName, position, avgPrice], ...]
+// input: [[itemName, position, avgPrice], ...]
 export const generatePortfolio = async (
   req: Request,
   res: Response
@@ -232,7 +232,7 @@ export const generatePortfolio = async (
         $project: {
           _id: 0,
           itemName: "$_id",
-          netQuantity: {
+          position: {
             $subtract: ["$totalBuyQuantity", "$totalSellQuantity"],
           },
           totalBuyPrice: 1,
@@ -241,14 +241,14 @@ export const generatePortfolio = async (
       },
       {
         $match: {
-          netQuantity: { $gt: 0 }, // Only keep items with a positive position
+          position: { $gt: 0 }, // Only keep items with a positive position
         },
       },
       {
         $project: {
           itemName: 1,
-          netQuantity: 1,
-          averagePrice: { $divide: ["$totalBuyPrice", "$totalBuyQuantity"] },
+          position: 1,
+          avgPrice: { $divide: ["$totalBuyPrice", "$totalBuyQuantity"] },
         },
       },
     ]);
@@ -258,13 +258,7 @@ export const generatePortfolio = async (
       return;
     }
 
-    const portfolio = result.map((item) => [
-      item.itemName,
-      item.netQuantity,
-      item.averagePrice,
-    ]);
-
-    res.status(200).json(portfolio);
+    res.status(200).json(result);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);

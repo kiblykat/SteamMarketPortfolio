@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import transactionAPI from "../api/api";
 
 const Portfolio = () => {
-  const [portfolio, setPortfolio] = useState<[string, number, number][]>([]);
+  const [portfolio, setPortfolio] = useState<
+    { itemName: string; position: number; avgPrice: number }[]
+  >([]);
   const [currentSteamPrices, setCurrentSteamPrices] = useState<
     Record<string, number>
   >({});
@@ -10,12 +12,18 @@ const Portfolio = () => {
     async function generatePortfolio() {
       try {
         const portfolioRes = await transactionAPI.get<
-          Array<[string, number, number]>
+          Array<{ itemName: string; position: number; avgPrice: number }>
         >("transactions/generate-portfolio?uid=kiblykat");
         setPortfolio(portfolioRes.data);
         const distinctNames: string[] = [
           ...new Set(
-            portfolioRes.data.map((item: [string, number, number]) => item[0])
+            portfolioRes.data.map(
+              (item: {
+                itemName: string;
+                position: number;
+                avgPrice: number;
+              }) => item.itemName
+            )
           ),
         ];
         const currentSteamPricesRes = await transactionAPI.get(
@@ -49,32 +57,29 @@ const Portfolio = () => {
             <tbody>
               {portfolio.map((item, index) => (
                 <tr key={index}>
-                  {/* {itemName} */}
-                  <td>{item[0]}</td>
-                  {/* {Position} */}
-                  <td>{item[1]}</td>
-                  {/* {Avg Price} */}
-                  <td>{item[2].toFixed(2)}</td>
+                  <td>{item.itemName}</td>
+                  <td>{item.position}</td>
+                  <td>{item.avgPrice.toFixed(2)}</td>
                   {/* {Curr Price} */}
                   <td>
-                    {currentSteamPrices[item[0]]
-                      ? currentSteamPrices[item[0]]
+                    {currentSteamPrices[item.itemName]
+                      ? currentSteamPrices[item.itemName]
                       : "N/A"}
                   </td>
                   {/* {P&L} */}
                   <td
                     className={
-                      currentSteamPrices[item[0]] * item[1] -
-                        item[2] * item[1] >
+                      currentSteamPrices[item.itemName] * item.position -
+                        item.avgPrice * item.position >
                       0
                         ? "text-success"
                         : "text-error"
                     }
                   >
-                    {currentSteamPrices[item[0]] !== 0
+                    {currentSteamPrices[item.itemName] !== 0
                       ? (
-                          currentSteamPrices[item[0]] * item[1] -
-                          item[2] * item[1]
+                          currentSteamPrices[item.itemName] * item.position -
+                          item.avgPrice * item.position
                         ).toFixed(2)
                       : "N/A"}
                   </td>
