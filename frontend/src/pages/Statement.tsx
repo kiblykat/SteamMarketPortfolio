@@ -62,10 +62,10 @@ const Statement = () => {
                     <td>{transaction.type}</td>
                     <td
                       className={
-                        transaction.price < 0 ? "text-success" : "text-error"
+                        transaction.type == "SELL" ? "text-success" : "text-error"
                       }
                     >
-                      {transaction.price < 0 ? "+" : "-"}$
+                      {transaction.type == "SELL" ? "+ " : "- "}$
                       {Math.abs(transaction.price).toFixed(2)}
                     </td>
                     <td> {transaction.quantity}</td>
