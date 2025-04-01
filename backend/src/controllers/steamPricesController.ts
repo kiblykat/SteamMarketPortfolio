@@ -1,29 +1,35 @@
 import axios from "axios";
 import { Request, Response } from "express";
 
-export const getCasePrices = async (req: Request, res: Response) => {
-  //why does this function get called twice?
-  try {
-    const fractureCaseResponse = await axios.get(
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Fracture%20Case"
-    );
-    const prismaCaseResponse = await axios.get(
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case"
-    );
-    const clutchCaseResponse = await axios.get(
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Clutch%20Case"
-    );
-    res.status(200).json({
-      fractureCase: parseFloat(fractureCaseResponse.data.median_price.replace("S$","")),
-      prismaCase: parseFloat(prismaCaseResponse.data.median_price.replace("S$","")),
-      clutchCase: parseFloat(clutchCaseResponse.data.median_price.replace("S$","")),
-    });
+export const getCurrentSteamPrices = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const hash: Record<string, string> = {
+    "Snakebite Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Snakebite%20Case",
+    "Fracture Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Fracture%20Case",
+    "Prisma Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case",
+    "Clutch Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Clutch%20Case",
+  };
 
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
-    } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+  try {
+    const queryParam = req.query.itemName as string; // Replace 'itemName' with the actual query parameter key
+    if (hash[queryParam] === undefined) {
+      res.status(400).json({ message: "Invalid item name" });
+      return;
     }
+    const response = await axios.get(hash[queryParam]);
+    const data = response.data;
+    const priceString = data.median_price;
+    console.log(priceString);
+    const price = parseFloat(priceString.replace(/[^0-9.-]+/g, ""));
+    res.status(200).json({ price });
+  } catch (error) {
+    console.error("Error fetching price:", error);
+    res.status(500).json({ message: (error as Error).message });
   }
 };
