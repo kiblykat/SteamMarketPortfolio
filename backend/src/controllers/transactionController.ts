@@ -175,3 +175,99 @@ export const getAveragePrices = async (req: Request, res: Response) => {
     }
   }
 };
+
+// Generate Portfolio returns
+// [[itemName, position, avgPrice], ...]
+export const generatePortfolio = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { uid } = req.query;
+
+    if (!uid) {
+      res.status(400).json({ message: "Missing uid" });
+      return;
+    }
+
+    const result = await Transaction.aggregate([
+      {
+        $match: {
+          uid: String(uid),
+        },
+      },
+      {
+        $group: {
+          _id: "$itemName",
+          totalBuyPrice: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$type", "BUY"] },
+                then: { $multiply: ["$price", "$quantity"] },
+                else: 0,
+              },
+            },
+          },
+          totalBuyQuantity: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$type", "BUY"] },
+                then: "$quantity",
+                else: 0,
+              },
+            },
+          },
+          totalSellQuantity: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$type", "SELL"] },
+                then: "$quantity",
+                else: 0,
+              },
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          itemName: "$_id",
+          netQuantity: {
+            $subtract: ["$totalBuyQuantity", "$totalSellQuantity"],
+          },
+          totalBuyPrice: 1,
+          totalBuyQuantity: 1,
+        },
+      },
+      {
+        $match: {
+          netQuantity: { $gt: 0 }, // Only keep items with a positive position
+        },
+      },
+      {
+        $project: {
+          itemName: 1,
+          netQuantity: 1,
+          averagePrice: { $divide: ["$totalBuyPrice", "$totalBuyQuantity"] },
+        },
+      },
+    ]);
+
+    if (result.length === 0) {
+      res.status(404).json({ message: "No transactions found for this user" });
+      return;
+    }
+
+    const portfolio = result.map((item) => [
+      item.itemName,
+      item.netQuantity,
+      item.averagePrice,
+    ]);
+
+    res.status(200).json(portfolio);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.message);
+    }
+  }
+};
