@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import transactionAPI from "../api/api";
 
 const Portfolio = () => {
-  const [portfolio, setPortfolio] = useState([]);
+  const [portfolio, setPortfolio] = useState<
+    [string, number, number, number][]
+  >([]);
   useEffect(() => {
     async function generatePortfolio() {
       try {
-        const res = await transactionAPI.get(
+        const portfolioRes = await transactionAPI.get(
           "transactions/generate-portfolio?uid=kiblykat"
         );
-        setPortfolio(res.data);
-        return res;
+        setPortfolio(portfolioRes.data);
+        return portfolioRes;
       } catch (err) {
         console.error(err);
       }
