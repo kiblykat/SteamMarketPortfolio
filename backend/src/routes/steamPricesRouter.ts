@@ -1,8 +1,8 @@
 import express from "express";
-import { getCasePrices } from "../controllers/steamPricesController";
+import { getCurrentSteamPrices } from "../controllers/steamPricesController";
 
 const steamPriceRouter = express.Router();
 
-steamPriceRouter.get("/currentSteamPrices", getCasePrices);
+steamPriceRouter.get("/currentSteamPrices", getCurrentSteamPrices);
 
 export default steamPriceRouter;
