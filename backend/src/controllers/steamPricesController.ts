@@ -14,6 +14,20 @@ export const getCurrentSteamPrices = async (
       "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case",
     "Clutch Case":
       "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Clutch%20Case",
+    "Danger Zone Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Danger%20Zone%20Case",
+    "Mann Co. Supply Crate Key":
+      "https://steamcommunity.com/market/priceoverview/?appid=440&country=SG&currency=13&market_hash_name=Mann%20Co.%20Supply%20Crate%20Key",
+    "Shadow Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Shadow%20Case",
+    "Prisma 2 Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case",
+    "CS20 Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=CS20%20Case",
+    "Horizon Case":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Horizon%20Case",
+    ":yellowarrow":
+      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=%3Ayellowarrow%3A",
   };
 
   try {
@@ -29,7 +43,7 @@ export const getCurrentSteamPrices = async (
 
     for (const itemName of itemNames) {
       if (!hash[itemName]) {
-        priceResults[itemName] = "Invalid item name";
+        priceResults[itemName] = 0;
         continue;
       }
 
@@ -40,7 +54,7 @@ export const getCurrentSteamPrices = async (
         const price =
           priceString !== "N/A"
             ? parseFloat(priceString.replace(/[^0-9.-]+/g, ""))
-            : "N/A";
+            : 0;
         priceResults[itemName] = price;
       } catch (error) {
         priceResults[itemName] = "Error fetching price";

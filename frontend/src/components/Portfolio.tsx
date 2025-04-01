@@ -2,17 +2,28 @@ import { useEffect, useState } from "react";
 import transactionAPI from "../api/api";
 
 const Portfolio = () => {
-  const [portfolio, setPortfolio] = useState<
-    [string, number, number, number][]
-  >([]);
+  const [portfolio, setPortfolio] = useState<[string, number, number][]>([]);
+  const [currentSteamPrices, setCurrentSteamPrices] = useState<
+    Record<string, number>
+  >({});
   useEffect(() => {
     async function generatePortfolio() {
       try {
-        const portfolioRes = await transactionAPI.get(
-          "transactions/generate-portfolio?uid=kiblykat"
-        );
+        const portfolioRes = await transactionAPI.get<
+          Array<[string, number, number]>
+        >("transactions/generate-portfolio?uid=kiblykat");
         setPortfolio(portfolioRes.data);
-        return portfolioRes;
+        const distinctNames: string[] = [
+          ...new Set(
+            portfolioRes.data.map((item: [string, number, number]) => item[0])
+          ),
+        ];
+        const currentSteamPricesRes = await transactionAPI.get(
+          `steamPrices/currentSteamPrices?items=${JSON.stringify(
+            distinctNames
+          )}`
+        );
+        setCurrentSteamPrices(currentSteamPricesRes.data);
       } catch (err) {
         console.error(err);
       }
@@ -31,16 +42,42 @@ const Portfolio = () => {
                 <th>Item</th>
                 <th>Position</th>
                 <th>Avg Price</th>
+                <th>Curr Price</th>
                 <th>P&L</th>
               </tr>
             </thead>
             <tbody>
               {portfolio.map((item, index) => (
                 <tr key={index}>
+                  {/* {itemName} */}
                   <td>{item[0]}</td>
+                  {/* {Position} */}
                   <td>{item[1]}</td>
+                  {/* {Avg Price} */}
                   <td>{item[2].toFixed(2)}</td>
-                  <td>placeholder</td>
+                  {/* {Curr Price} */}
+                  <td>
+                    {currentSteamPrices[item[0]]
+                      ? currentSteamPrices[item[0]]
+                      : "N/A"}
+                  </td>
+                  {/* {P&L} */}
+                  <td
+                    className={
+                      currentSteamPrices[item[0]] * item[1] -
+                        item[2] * item[1] >
+                      0
+                        ? "text-success"
+                        : "text-error"
+                    }
+                  >
+                    {currentSteamPrices[item[0]] !== 0
+                      ? (
+                          currentSteamPrices[item[0]] * item[1] -
+                          item[2] * item[1]
+                        ).toFixed(2)
+                      : "N/A"}
+                  </td>
                 </tr>
               ))}
             </tbody>
