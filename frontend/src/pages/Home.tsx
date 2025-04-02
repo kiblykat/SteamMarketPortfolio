@@ -1,68 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
-import transactionAPI from "../api/api";
 import Portfolio from "../components/Portfolio";
 
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const { setActiveTab } = globalContext;
-  // const [profit, setProfit] = useState<number>(0);
-  const [averagePricesQty, setAveragePriceQty] = useState<{
-    [key: string]: {
-      averagePrice: number;
-      totalQuantity: number;
-    };
-  }>({});
-  const [currentSteamPrices, setCurrentSteamPrices] = useState<{
-    [key: string]: string;
-  }>({});
 
   useEffect(() => {
     setActiveTab("Home");
-    const getSteamAndAvgPrice = async () => {
-      // Retrieve current steam prices
-      const currentSteamPricesResponse = await transactionAPI.get(
-        "/steamPrices/currentSteamPrices"
-      );
-      setCurrentSteamPrices({
-        fractureCase: currentSteamPricesResponse.data.fractureCase,
-        prismaCase: currentSteamPricesResponse.data.prismaCase,
-        clutchCase: currentSteamPricesResponse.data.clutchCase,
-      });
-      // Retrieve average price of each case
-      const averagePricesResponse = await transactionAPI.get(
-        "/transactions/average-prices?uid=kiblykat"
-      );
-      setAveragePriceQty(averagePricesResponse.data);
-    };
-    getSteamAndAvgPrice();
-  }, [navigate, setActiveTab, setCurrentSteamPrices]);
-
-  const calculateProfit = (): number => {
-    let totalProfit = 0;
-    console.log(
-      `Current Steam Prices: ${JSON.stringify(currentSteamPrices.clutchCase)}`
-    );
-    // Loop through each item in averagePricesQty
-    for (const steamItem in averagePricesQty) {
-      const currentPrice = parseFloat(currentSteamPrices[steamItem]);
-      console.log(`Current Price: ${currentPrice}`);
-      const averagePrice = averagePricesQty[steamItem].averagePrice;
-      console.log(`Average Price: ${averagePrice}`);
-      const totalQuantity = averagePricesQty[steamItem].totalQuantity;
-      console.log(`Total Quantity: ${totalQuantity}`);
-
-      // Calculate profit for each steamItem and add it to the totalProfit
-      const profit =
-        currentPrice * totalQuantity - averagePrice * totalQuantity;
-      totalProfit += profit;
-    }
-
-    console.log(totalProfit);
-    return totalProfit;
-  };
+  }, [navigate, setActiveTab]);
 
   return (
     <>
@@ -72,7 +20,7 @@ const Home = () => {
             <div className="card-body">
               <div className="card-title">Steam Profit</div>
               <hr></hr>
-              <h1 className=" text-6xl font-semibold">${calculateProfit()}</h1>
+              <h1 className=" text-6xl font-semibold">To be determined</h1>
               <button
                 onClick={() => navigate("/trade")}
                 className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"
