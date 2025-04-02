@@ -77,7 +77,9 @@ const Home = () => {
             <div className="card-body">
               <div className="card-title">Steam Profit</div>
               <hr></hr>
-              <h1 className=" text-6xl font-semibold">To be determined</h1>
+              <h1 className=" text-6xl font-semibold">
+                ${portfolio.reduce((acc, curr) => acc + curr.PL, 0).toFixed(2)}
+              </h1>
               <button
                 onClick={() => navigate("/trade")}
                 className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"
