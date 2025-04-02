@@ -81,11 +81,12 @@ const Portfolio = () => {
                     <div>{item.avgPrice.toFixed(2)}</div>
                   </td>
 
-                  {/* {P&L - unrealized} */}
+                  {/* {P&L : unrealized + realized} */}
                   <td
                     className={
                       currentSteamPrices[item.itemName] * item.position -
-                        item.avgPrice * item.position >
+                        item.avgPrice * item.position +
+                        item.realizedPL >
                       0
                         ? "text-success font-semibold"
                         : "text-error"
@@ -94,7 +95,8 @@ const Portfolio = () => {
                     {currentSteamPrices[item.itemName] !== 0
                       ? (
                           currentSteamPrices[item.itemName] * item.position -
-                          item.avgPrice * item.position
+                          item.avgPrice * item.position +
+                          item.realizedPL
                         ).toFixed(2)
                       : "N/A"}
                   </td>
