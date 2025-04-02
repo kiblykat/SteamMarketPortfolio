@@ -57,6 +57,10 @@ const Home = () => {
           };
         });
 
+        portfolioResWithPL.sort(
+          (a, b) => a.itemName.localeCompare(b.itemName) // Sort by itemName
+        );
+
         setPortfolio(portfolioResWithPL);
       } catch (err) {
         console.error(err);
