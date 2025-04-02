@@ -48,31 +48,42 @@ const Portfolio = () => {
             <thead>
               <tr>
                 <th>Item</th>
-                <th>Position</th>
-                <th>Avg Price</th>
-                <th>Curr Price</th>
+                <th>Position | Mkt</th>
+                <th>Curr | Avg Price</th>
                 <th>P&L</th>
+                <th>Unrealized P&L</th>
               </tr>
             </thead>
             <tbody>
               {portfolio.map((item, index) => (
                 <tr key={index}>
                   <td>{item.itemName}</td>
-                  <td>{item.position}</td>
-                  <td>{item.avgPrice.toFixed(2)}</td>
-                  {/* {Curr Price} */}
                   <td>
-                    {currentSteamPrices[item.itemName]
-                      ? currentSteamPrices[item.itemName]
-                      : "N/A"}
+                    <div>
+                      <div className="font-semibold">{item.position}</div>
+                      <div>
+                        {(
+                          item.position * currentSteamPrices[item.itemName] || 0
+                        ).toFixed(2)}
+                      </div>
+                    </div>
                   </td>
+                  <td>
+                    <div className="font-semibold">
+                      {currentSteamPrices[item.itemName]
+                        ? currentSteamPrices[item.itemName]
+                        : "N/A"}
+                    </div>
+                    <div>{item.avgPrice.toFixed(2)}</div>
+                  </td>
+
                   {/* {P&L} */}
                   <td
                     className={
                       currentSteamPrices[item.itemName] * item.position -
                         item.avgPrice * item.position >
                       0
-                        ? "text-success"
+                        ? "text-success font-semibold"
                         : "text-error"
                     }
                   >
