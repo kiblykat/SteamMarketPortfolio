@@ -1,16 +1,69 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Portfolio from "../components/Portfolio";
+import transactionAPI from "../api/api";
 
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
   const { setActiveTab } = globalContext;
+  const [portfolio, setPortfolio] = useState<
+    {
+      itemName: string;
+      position: number;
+      avgPrice: number;
+      realizedPL: number;
+      PL: number;
+    }[]
+  >([]);
+
+  const [currentSteamPrices, setCurrentSteamPrices] = useState<
+    Record<string, number>
+  >({});
 
   useEffect(() => {
     setActiveTab("Home");
-  }, [navigate, setActiveTab]);
+    async function generatePortfolio() {
+      try {
+        const portfolioRes = await transactionAPI.get<
+          Array<{
+            itemName: string;
+            position: number;
+            avgPrice: number;
+            realizedPL: number;
+          }>
+        >("transactions/generate-portfolio?uid=kiblykat");
+
+        const distinctNames: string[] = [
+          ...new Set(portfolioRes.data.map((item) => item.itemName)),
+        ];
+
+        const currentSteamPricesRes = await transactionAPI.get(
+          `steamPrices/currentSteamPrices?items=${JSON.stringify(
+            distinctNames
+          )}`
+        );
+        setCurrentSteamPrices(currentSteamPricesRes.data);
+        const steamPricesData = currentSteamPricesRes.data; // use steamPricesData to avoid asynchronous setState which causes issues
+
+        const portfolioResWithPL = portfolioRes.data.map((item) => {
+          return {
+            ...item,
+            PL:
+              item.position * steamPricesData[item.itemName] -
+              item.position * item.avgPrice +
+              item.realizedPL,
+          };
+        });
+
+        setPortfolio(portfolioResWithPL);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    generatePortfolio();
+  }, [setActiveTab]);
 
   return (
     <>
@@ -64,7 +117,10 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <Portfolio />
+          <Portfolio
+            portfolio={portfolio}
+            currentSteamPrices={currentSteamPrices}
+          />
         </div>
       </div>
     </>

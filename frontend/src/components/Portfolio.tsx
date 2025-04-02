@@ -1,65 +1,18 @@
-import { useEffect, useState } from "react";
-import transactionAPI from "../api/api";
+interface PortfolioProps {
+  portfolio: {
+    itemName: string;
+    position: number;
+    avgPrice: number;
+    PL: number;
+    realizedPL: number;
+  }[];
+  currentSteamPrices: Record<string, number>;
+}
 
-const Portfolio = () => {
-  const [portfolio, setPortfolio] = useState<
-    {
-      itemName: string;
-      position: number;
-      avgPrice: number;
-      realizedPL: number;
-      PL: number;
-    }[]
-  >([]);
-
-  const [currentSteamPrices, setCurrentSteamPrices] = useState<
-    Record<string, number>
-  >({});
-
-  useEffect(() => {
-    async function generatePortfolio() {
-      try {
-        const portfolioRes = await transactionAPI.get<
-          Array<{
-            itemName: string;
-            position: number;
-            avgPrice: number;
-            realizedPL: number;
-          }>
-        >("transactions/generate-portfolio?uid=kiblykat");
-
-        const distinctNames: string[] = [
-          ...new Set(portfolioRes.data.map((item) => item.itemName)),
-        ];
-
-        const currentSteamPricesRes = await transactionAPI.get(
-          `steamPrices/currentSteamPrices?items=${JSON.stringify(
-            distinctNames
-          )}`
-        );
-        setCurrentSteamPrices(currentSteamPricesRes.data);
-        const priceData = currentSteamPricesRes.data; // use priceData to avoid asynchronous setState which causes issues
-
-        const portfolioResWithPL = portfolioRes.data.map((item) => {
-          return {
-            ...item,
-            PL:
-              item.position * priceData[item.itemName] -
-              item.position * item.avgPrice +
-              item.realizedPL,
-          };
-        });
-
-        setPortfolio(portfolioResWithPL);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    if (Object.keys(currentSteamPrices).length === 0) {
-      // Only fetch and update if currentSteamPrices is empty
-      generatePortfolio();
-    }
-  }, [currentSteamPrices]);
+const Portfolio: React.FC<PortfolioProps> = ({
+  portfolio,
+  currentSteamPrices,
+}) => {
   return (
     <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-4 mx-12 md:ml-12 md:mr-4 mt-12 border border-gray-300">
       <div className="card-body">
