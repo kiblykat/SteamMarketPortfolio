@@ -7,27 +7,23 @@ export const getCurrentSteamPrices = async (
 ): Promise<void> => {
   const hash: Record<string, string> = {
     "Snakebite Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Snakebite%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176240926",
     "Fracture Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Fracture%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176185874",
     "Prisma Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176042493",
     "Clutch Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Clutch%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=175966708",
     "Danger Zone Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Danger%20Zone%20Case",
-    "Mann Co. Supply Crate Key":
-      "https://steamcommunity.com/market/priceoverview/?appid=440&country=SG&currency=13&market_hash_name=Mann%20Co.%20Supply%20Crate%20Key",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176024744",
     "Shadow Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Shadow%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=67060949",
     "Prisma 2 Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Prisma%202%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176118270",
     "CS20 Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=CS20%20Case",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176091756",
     "Horizon Case":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=Horizon%20Case",
-    ":yellowarrow":
-      "https://steamcommunity.com/market/priceoverview/?appid=730&country=SG&currency=13&market_hash_name=%3Ayellowarrow%3A",
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=175999886",
   };
 
   try {
@@ -40,7 +36,7 @@ export const getCurrentSteamPrices = async (
     }
 
     const priceResults: Record<string, number | string> = {};
-
+    let count = 0;
     for (const itemName of itemNames) {
       if (!hash[itemName]) {
         priceResults[itemName] = 0;
@@ -50,14 +46,14 @@ export const getCurrentSteamPrices = async (
       try {
         const response = await axios.get(hash[itemName]);
         const data = response.data;
-        const priceString = data.median_price || "N/A";
-        const price =
-          priceString !== "N/A"
-            ? parseFloat(priceString.replace(/[^0-9.-]+/g, ""))
-            : 0;
+        const price = parseInt(data.lowest_sell_order) / 100 || "N/A";
         priceResults[itemName] = price;
       } catch (error) {
         priceResults[itemName] = "Error fetching price";
+        console.log(
+          `Error fetching price for ${itemName}:`,
+          (error as Error).message
+        );
       }
     }
 
