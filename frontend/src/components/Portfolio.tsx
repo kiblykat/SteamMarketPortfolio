@@ -8,6 +8,7 @@ const Portfolio = () => {
       position: number;
       avgPrice: number;
       realizedPL: number;
+      PL: number;
     }[]
   >([]);
 
@@ -26,22 +27,39 @@ const Portfolio = () => {
             realizedPL: number;
           }>
         >("transactions/generate-portfolio?uid=kiblykat");
-        setPortfolio(portfolioRes.data);
+
         const distinctNames: string[] = [
           ...new Set(portfolioRes.data.map((item) => item.itemName)),
         ];
+
         const currentSteamPricesRes = await transactionAPI.get(
           `steamPrices/currentSteamPrices?items=${JSON.stringify(
             distinctNames
           )}`
         );
         setCurrentSteamPrices(currentSteamPricesRes.data);
+        const priceData = currentSteamPricesRes.data; // use priceData to avoid asynchronous setState which causes issues
+
+        const portfolioResWithPL = portfolioRes.data.map((item) => {
+          return {
+            ...item,
+            PL:
+              item.position * priceData[item.itemName] -
+              item.position * item.avgPrice +
+              item.realizedPL,
+          };
+        });
+
+        setPortfolio(portfolioResWithPL);
       } catch (err) {
         console.error(err);
       }
     }
-    generatePortfolio();
-  }, []);
+    if (Object.keys(currentSteamPrices).length === 0) {
+      // Only fetch and update if currentSteamPrices is empty
+      generatePortfolio();
+    }
+  }, [currentSteamPrices]);
   return (
     <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-4 mx-12 md:ml-12 md:mr-4 mt-12 border border-gray-300">
       <div className="card-body">
@@ -84,21 +102,10 @@ const Portfolio = () => {
                   {/* {P&L : unrealized + realized} */}
                   <td
                     className={
-                      currentSteamPrices[item.itemName] * item.position -
-                        item.avgPrice * item.position +
-                        item.realizedPL >
-                      0
-                        ? "text-success font-semibold"
-                        : "text-error"
+                      item.PL > 0 ? "text-success font-semibold" : "text-error"
                     }
                   >
-                    {currentSteamPrices[item.itemName] !== 0
-                      ? (
-                          currentSteamPrices[item.itemName] * item.position -
-                          item.avgPrice * item.position +
-                          item.realizedPL
-                        ).toFixed(2)
-                      : "N/A"}
+                    {item.PL.toFixed(2)}
                   </td>
                   <td
                     className={
