@@ -26,11 +26,6 @@ export const initialGlobalState: GlobalContextType = {
   setCurrentSteamPrices: () => {},
 };
 
-export interface SlideInTextProps {
-  children: React.ReactNode;
-  delay?: number;
-}
-
 export interface Transaction {
   itemName: string;
   price: number;
