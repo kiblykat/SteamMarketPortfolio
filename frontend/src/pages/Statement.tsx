@@ -17,11 +17,6 @@ const Statement = () => {
       const data = response.data;
       console.log(data);
       setTransactionData(data);
-      const casePricesResponse = await transactionAPI.get(
-        "/steamPrices/currentSteamPrices"
-      );
-      setCurrentSteamPrices(casePricesResponse.data.fractureCase);
-      console.log(casePricesResponse.data.fractureCase);
     };
     fetchTransactions();
   }, [navigate, setActiveTab, setCurrentSteamPrices]);
@@ -62,7 +57,9 @@ const Statement = () => {
                     <td>{transaction.type}</td>
                     <td
                       className={
-                        transaction.type == "SELL" ? "text-success" : "text-error"
+                        transaction.type == "SELL"
+                          ? "text-success"
+                          : "text-error"
                       }
                     >
                       {transaction.type == "SELL" ? "+ " : "- "}$
