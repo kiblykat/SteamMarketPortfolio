@@ -217,6 +217,15 @@ export const generatePortfolio = async (
               },
             },
           },
+          totalSellPrice: {
+            $sum: {
+              $cond: {
+                if: { $eq: ["$type", "SELL"] },
+                then: { $multiply: ["$price", "$quantity"] },
+                else: 0,
+              },
+            },
+          },
           totalSellQuantity: {
             $sum: {
               $cond: {
@@ -237,6 +246,7 @@ export const generatePortfolio = async (
           },
           totalBuyPrice: 1,
           totalBuyQuantity: 1,
+          totalSellPrice: 1,
         },
       },
       {
@@ -249,6 +259,7 @@ export const generatePortfolio = async (
           itemName: 1,
           position: 1,
           avgPrice: { $divide: ["$totalBuyPrice", "$totalBuyQuantity"] },
+          realizedPL: "$totalSellPrice",
         },
       },
     ]);

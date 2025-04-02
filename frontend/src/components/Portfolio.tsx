@@ -3,28 +3,32 @@ import transactionAPI from "../api/api";
 
 const Portfolio = () => {
   const [portfolio, setPortfolio] = useState<
-    { itemName: string; position: number; avgPrice: number }[]
+    {
+      itemName: string;
+      position: number;
+      avgPrice: number;
+      realizedPL: number;
+    }[]
   >([]);
+
   const [currentSteamPrices, setCurrentSteamPrices] = useState<
     Record<string, number>
   >({});
+
   useEffect(() => {
     async function generatePortfolio() {
       try {
         const portfolioRes = await transactionAPI.get<
-          Array<{ itemName: string; position: number; avgPrice: number }>
+          Array<{
+            itemName: string;
+            position: number;
+            avgPrice: number;
+            realizedPL: number;
+          }>
         >("transactions/generate-portfolio?uid=kiblykat");
         setPortfolio(portfolioRes.data);
         const distinctNames: string[] = [
-          ...new Set(
-            portfolioRes.data.map(
-              (item: {
-                itemName: string;
-                position: number;
-                avgPrice: number;
-              }) => item.itemName
-            )
-          ),
+          ...new Set(portfolioRes.data.map((item) => item.itemName)),
         ];
         const currentSteamPricesRes = await transactionAPI.get(
           `steamPrices/currentSteamPrices?items=${JSON.stringify(
@@ -51,7 +55,7 @@ const Portfolio = () => {
                 <th>Position | Mkt</th>
                 <th>Curr | Avg Price</th>
                 <th>P&L</th>
-                <th>Unrealized P&L</th>
+                <th>Realized P&L</th>
               </tr>
             </thead>
             <tbody>
@@ -77,7 +81,7 @@ const Portfolio = () => {
                     <div>{item.avgPrice.toFixed(2)}</div>
                   </td>
 
-                  {/* {P&L} */}
+                  {/* {P&L - unrealized} */}
                   <td
                     className={
                       currentSteamPrices[item.itemName] * item.position -
@@ -93,6 +97,17 @@ const Portfolio = () => {
                           item.avgPrice * item.position
                         ).toFixed(2)
                       : "N/A"}
+                  </td>
+                  <td
+                    className={
+                      item.realizedPL > 0
+                        ? "text-success font-semibold"
+                        : item.realizedPL == 0
+                        ? ""
+                        : "text-error"
+                    }
+                  >
+                    {item.realizedPL}
                   </td>
                 </tr>
               ))}
