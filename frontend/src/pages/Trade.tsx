@@ -54,6 +54,36 @@ const Trade = () => {
     // navigate("/trade"); // navigate back to trade page after successful buy
   };
 
+  const handleSell = async (): Promise<void> => {
+    const type = "SELL";
+    //check if the input matches a valid number format
+    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
+
+    if (!isValidPriceFormat) {
+      toast.error("Please enter a valid price");
+      return;
+    }
+
+    const price = parseFloat(strPrice);
+    if (isNaN(price) || price <= 0) {
+      toast.error("Please enter a valid price");
+      return;
+    }
+
+    await transactionAPI.post("transactions/create", {
+      uid: "kiblykat",
+      itemUrlName,
+      price,
+      type,
+      quantity,
+    });
+
+    toast.success(
+      `You have sold ${quantity} ${itemUrlName}s for $${price} each`
+    );
+    // navigate("/trade"); // navigate back to trade page after successful buy
+  };
+
   return (
     <div className="bg-stone-100 h-screen">
       <div className="flex flex-row justify-center">
@@ -153,8 +183,8 @@ const Trade = () => {
               </button>
             ) : (
               <button
-                data-testid="buy-button"
-                onClick={() => handleBuy()}
+                data-testid="sell-button"
+                onClick={() => handleSell()}
                 className="btn rounded-full w-52 mb-16 bg-red-600 text-white"
               >
                 Sell
