@@ -8,7 +8,7 @@ import GlobalContext from "../GlobalContext";
 const Trade = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab } = globalContext;
+  const { setActiveTab, portfolio } = globalContext;
 
   useEffect(() => {
     setActiveTab("Trade");
@@ -114,7 +114,15 @@ const Trade = () => {
             </div>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
-          <div>Current Position</div>
+          <div className="flex flex-row justify-between items-center w-full px-8">
+            <div>Current Position</div>
+            <div>
+              {
+                portfolio.find((item) => item.itemName == "Fracture Case")
+                  ?.position
+              }
+            </div>
+          </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-col md:flex-row items-center justify-center">
