@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 interface PortfolioProps {
   portfolio: {
     itemName: string;
@@ -13,6 +15,7 @@ const Portfolio: React.FC<PortfolioProps> = ({
   portfolio,
   currentSteamPrices,
 }) => {
+  const navigate = useNavigate();
   return (
     <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-4 mx-12 md:ml-12 md:mr-4 mt-12 border border-gray-300">
       <div className="card-body">
@@ -31,7 +34,13 @@ const Portfolio: React.FC<PortfolioProps> = ({
             </thead>
             <tbody>
               {portfolio.map((item, index) => (
-                <tr key={index}>
+                <tr
+                  className="hover:cursor-pointer hover:bg-gray-100"
+                  key={index}
+                  onClick={() =>
+                    navigate(`/trade/${item.itemName.split(" ").join("%20")}`)
+                  }
+                >
                   <td>{item.itemName}</td>
                   <td>
                     <div>

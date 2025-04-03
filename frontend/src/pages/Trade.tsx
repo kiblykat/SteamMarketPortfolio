@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { marketItems } from "../types/globalContextTypes";
 import transactionAPI from "../api/api";
@@ -7,8 +7,9 @@ import GlobalContext from "../GlobalContext";
 
 const Trade = () => {
   const navigate = useNavigate();
+  const { itemUrlName } = useParams() as { itemUrlName: string };
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab, portfolio } = globalContext;
+  const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
 
   useEffect(() => {
     setActiveTab("Trade");
@@ -16,19 +17,7 @@ const Trade = () => {
   const [steamItem, setSteamItem] = useState<string>("");
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
-
-  const handleSteamItem = (item: string): void => {
-    const itemCamelCase = item
-      .toLowerCase()
-      .replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
-        index === 0 ? match.toLowerCase() : match.toUpperCase()
-      )
-      .replace(" ", "");
-    setSteamItem(itemCamelCase); //pass item as camelCased string for easy query on backend
-    setIsOpen(false);
-  };
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -85,7 +74,7 @@ const Trade = () => {
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
-            <p>&lt; Item Name &gt;</p>
+            <p className="text-xl font-semibold">{itemUrlName}</p>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8">
@@ -116,38 +105,21 @@ const Trade = () => {
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8">
             <div>Current Position</div>
-            <div>
-              {
-                portfolio.find((item) => item.itemName == "Fracture Case")
-                  ?.position
-              }
+            <div className="font-semibold text-xl">
+              {portfolio.find((item) => item.itemName == itemUrlName)?.position}
+            </div>
+          </div>
+          <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
+          <div className="flex flex-row justify-between items-center w-full px-8">
+            <div>Avg. Price</div>
+            <div className="font-semibold text-xl">
+              {currentSteamPrices[itemUrlName]}
             </div>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-col md:flex-row items-center justify-center">
-              <div className="flex flex-row items-center justify-center m-2">
-                {/* Dropdown */}
-                <div className="dropdown text-center">
-                  <button
-                    className="btn btn-secondary text-white w-40 rounded-lg text-center"
-                    onClick={() => setIsOpen(!isOpen)}
-                  >
-                    {steamItem || "Select Item"}
-                  </button>
-                  {isOpen && (
-                    <ul className="dropdown-content menu shadow bg-base-100 rounded-box md:w-48">
-                      {marketItems.map((item) => (
-                        <li key={item}>
-                          <button onClick={() => handleSteamItem(item)}>
-                            {item}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </div>
+              <div className="flex flex-row items-center justify-center m-2"></div>
               <div className="m-2">
                 <input
                   placeholder="Price"
