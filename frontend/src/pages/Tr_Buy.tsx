@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { useState } from "react";
 import { marketItems } from "../types/globalContextTypes";
 import transactionAPI from "../api/api";
+import { useContext, useEffect, useState } from "react";
+import GlobalContext from "../GlobalContext";
 
 const Tr_Buy = () => {
+  const navigate = useNavigate();
+  const globalContext = useContext(GlobalContext);
+  const { setActiveTab } = globalContext;
+
+  useEffect(() => {
+    setActiveTab("Trade");
+  }, [navigate, setActiveTab]);
   const [steamItem, setSteamItem] = useState<string>("");
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
@@ -29,7 +37,7 @@ const Tr_Buy = () => {
   };
 
   const handleBuy = async (): Promise<void> => {
-    const type = "BUY"
+    const type = "BUY";
     //check if the input matches a valid number format
     const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
 
@@ -58,7 +66,6 @@ const Tr_Buy = () => {
     // navigate("/trade"); // navigate back to trade page after successful buy
   };
 
-  const navigate = useNavigate();
   return (
     <div className="bg-stone-100 h-screen">
       <div className="flex flex-row justify-center">
@@ -66,7 +73,7 @@ const Tr_Buy = () => {
           <div className="flex flex-row justify-between">
             <i
               data-testid="back-button"
-              onClick={() => navigate("/trade")}
+              onClick={() => navigate("/home")}
               className="m-3 p-3 fa-solid fa-arrow-left text-xl rounded-full hover:bg-gray-100 hover:cursor-pointer"
             ></i>
             <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />
