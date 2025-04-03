@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Portfolio from "../components/Portfolio";
@@ -7,20 +7,13 @@ import transactionAPI from "../api/api";
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab } = globalContext;
-  const [portfolio, setPortfolio] = useState<
-    {
-      itemName: string;
-      position: number;
-      avgPrice: number;
-      realizedPL: number;
-      PL: number;
-    }[]
-  >([]);
-
-  const [currentSteamPrices, setCurrentSteamPrices] = useState<
-    Record<string, number>
-  >({});
+  const {
+    setActiveTab,
+    portfolio,
+    setPortfolio,
+    currentSteamPrices,
+    setCurrentSteamPrices,
+  } = globalContext;
 
   useEffect(() => {
     setActiveTab("Home");

@@ -14,10 +14,21 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     "Landing" | "Home" | "Trade" | "Statement"
   >("Landing");
 
-  const [currentSteamPrices, setCurrentSteamPrices] = useState<number>(0);
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [portfolio, setPortfolio] = useState<
+    {
+      itemName: string;
+      position: number;
+      avgPrice: number;
+      realizedPL: number;
+      PL: number;
+    }[]
+  >([]);
 
+  const [currentSteamPrices, setCurrentSteamPrices] = useState<
+    Record<string, number>
+  >({});
   const context = {
     activeTab,
     setActiveTab,
@@ -29,6 +40,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setTransactions,
     currentSteamPrices,
     setCurrentSteamPrices,
+    portfolio,
+    setPortfolio,
   };
 
   return (

@@ -7,6 +7,8 @@ export interface GlobalContextType {
   setBalance: (balance: number) => void;
   transactions: Transaction[];
   setTransactions: (transactions: Transaction[]) => void;
+  portfolio: portfolioItem[];
+  setPortfolio: (portfolio: portfolioItem[]) => void;
   currentSteamPrices: { [key: string]: number };
   setCurrentSteamPrices: (currentSteamPrices: {
     [key: string]: number;
@@ -22,9 +24,19 @@ export const initialGlobalState: GlobalContextType = {
   setBalance: () => {},
   transactions: [],
   setTransactions: () => {},
+  portfolio: [],
+  setPortfolio: () => {},
   currentSteamPrices: {},
   setCurrentSteamPrices: () => {},
 };
+
+export interface portfolioItem {
+  itemName: string;
+  position: number;
+  avgPrice: number;
+  realizedPL: number;
+  PL: number;
+}
 
 export interface Transaction {
   itemName: string;
