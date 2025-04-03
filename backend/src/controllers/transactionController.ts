@@ -14,13 +14,16 @@ export const createTransaction = async (
       return;
     }
 
+    if (!date) {
+      let date = new Date().toISOString(); // Set default date to current date if not provided
+    }
     const newTransaction = new Transaction({
       uid,
       itemName: steamItem,
       price,
       type,
       quantity,
-      date: new Date(date) || new Date(), // Use provided date or current date
+      date, // Use provided date or current date
     });
     await newTransaction.save();
 
