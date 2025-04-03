@@ -117,9 +117,8 @@ const Trade = () => {
             </div>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
-          <div className="flex flex-col justify-center items-center md:mx-20">
-            <div className="flex flex-col md:flex-row items-center justify-center">
-              <div className="flex flex-row items-center justify-center m-2"></div>
+          <div className="flex flex-col items-center w-1/2 md:mx-20">
+            <div className="flex flex-col md:flex-row justify-between">
               <div className="m-2">
                 <input
                   placeholder="Price"
