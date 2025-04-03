@@ -111,6 +111,15 @@ const Trade = () => {
           <div className="flex flex-row justify-between items-center w-full px-8">
             <div>Avg. Price</div>
             <div className="font-semibold text-xl">
+              {portfolio
+                .find((item) => item.itemName == itemUrlName)
+                ?.avgPrice.toFixed(2)}
+            </div>
+          </div>
+          <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
+          <div className="flex flex-row justify-between items-center w-full px-8">
+            <div>Curr. Steam Price</div>
+            <div className="font-semibold text-xl">
               {currentSteamPrices[itemUrlName]}
             </div>
           </div>
