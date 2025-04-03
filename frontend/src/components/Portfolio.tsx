@@ -78,7 +78,7 @@ const Portfolio: React.FC<PortfolioProps> = ({
                         : "text-error"
                     }
                   >
-                    {item.realizedPL}
+                    {item.realizedPL.toFixed(2)}
                   </td>
                 </tr>
               ))}
