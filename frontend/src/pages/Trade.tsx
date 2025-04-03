@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import { marketItems } from "../types/globalContextTypes";
 import transactionAPI from "../api/api";
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext";
@@ -14,7 +13,6 @@ const Trade = () => {
   useEffect(() => {
     setActiveTab("Trade");
   }, [navigate, setActiveTab]);
-  const [steamItem, setSteamItem] = useState<string>("");
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
@@ -44,14 +42,14 @@ const Trade = () => {
 
     await transactionAPI.post("transactions/create", {
       uid: "kiblykat",
-      steamItem,
+      itemUrlName,
       price,
       type,
       quantity,
     });
 
     toast.success(
-      `You have bought ${quantity} ${steamItem}s for $${price} each`
+      `You have bought ${quantity} ${itemUrlName}s for $${price} each`
     );
     // navigate("/trade"); // navigate back to trade page after successful buy
   };
