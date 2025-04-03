@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Statement from "./pages/Statement";
 import Trade from "./pages/Trade";
@@ -13,6 +13,7 @@ function App() {
       <Navbar />
       <Sidebar />
       <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
         <Route path="/statement" element={<Statement />} />
         <Route path="/trade" element={<Trade />} />
