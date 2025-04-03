@@ -17,6 +17,7 @@ const Trade = () => {
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
 
   const handleSteamItem = (item: string): void => {
     const itemCamelCase = item
@@ -82,7 +83,29 @@ const Trade = () => {
             </div>
             <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />
           </div>
-          <div>Buy/Sell</div>
+          <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
+          <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
+            <p>&lt; Item Name &gt;</p>
+          </div>
+          <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
+          <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
+            <div>Action</div>
+            <div>
+              <button
+                className={buyState ? "btn bg-green-500" : "btn"}
+                onClick={() => setBuyState(true)}
+              >
+                Buy
+              </button>
+              <button
+                className={buyState ? "btn" : "btn bg-red-500"}
+                onClick={() => setBuyState(false)}
+              >
+                Sell
+              </button>
+            </div>
+          </div>
+          <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-col md:flex-row items-center justify-center">
               <div className="flex flex-row items-center justify-center m-2">
@@ -124,13 +147,23 @@ const Trade = () => {
                 />
               </div>
             </div>
-            <button
-              data-testid="buy-button"
-              onClick={() => handleBuy()}
-              className="btn rounded-full w-52 mb-16 bg-gray-900 text-white"
-            >
-              Buy
-            </button>
+            {buyState ? (
+              <button
+                data-testid="buy-button"
+                onClick={() => handleBuy()}
+                className="btn rounded-full w-52 mb-16 bg-green-700 text-white"
+              >
+                Buy
+              </button>
+            ) : (
+              <button
+                data-testid="buy-button"
+                onClick={() => handleBuy()}
+                className="btn rounded-full w-52 mb-16 bg-red-700 text-white"
+              >
+                Sell
+              </button>
+            )}
           </div>
         </div>
       </div>
