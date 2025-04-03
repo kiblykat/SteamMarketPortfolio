@@ -1,6 +1,9 @@
-import { useContext, useEffect } from "react";
-import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { marketItems } from "../types/globalContextTypes";
+import transactionAPI from "../api/api";
+import { useContext, useEffect, useState } from "react";
+import GlobalContext from "../GlobalContext";
 
 const Trade = () => {
   const navigate = useNavigate();
@@ -10,43 +13,128 @@ const Trade = () => {
   useEffect(() => {
     setActiveTab("Trade");
   }, [navigate, setActiveTab]);
+  const [steamItem, setSteamItem] = useState<string>("");
+  const [strPrice, setStrPrice] = useState<string>("");
+  const [quantity, setQuantity] = useState<number | "">("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const handleSteamItem = (item: string): void => {
+    const itemCamelCase = item
+      .toLowerCase()
+      .replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) =>
+        index === 0 ? match.toLowerCase() : match.toUpperCase()
+      )
+      .replace(" ", "");
+    setSteamItem(itemCamelCase); //pass item as camelCased string for easy query on backend
+    setIsOpen(false);
+  };
+
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (newValue === "" || !isNaN(Number(newValue))) {
+      setQuantity(newValue === "" ? "" : Number(newValue));
+    }
+  };
+
+  const handleBuy = async (): Promise<void> => {
+    const type = "BUY";
+    //check if the input matches a valid number format
+    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
+
+    if (!isValidPriceFormat) {
+      toast.error("Please enter a valid price");
+      return;
+    }
+
+    const price = parseFloat(strPrice);
+    if (isNaN(price) || price <= 0) {
+      toast.error("Please enter a valid price");
+      return;
+    }
+
+    await transactionAPI.post("transactions/create", {
+      uid: "kiblykat",
+      steamItem,
+      price,
+      type,
+      quantity,
+    });
+
+    toast.success(
+      `You have bought ${quantity} ${steamItem}s for $${price} each`
+    );
+    // navigate("/trade"); // navigate back to trade page after successful buy
+  };
 
   return (
-    <>
-      <div className="bg-stone-100 h-full w-screen">
-        <div className="flex flex-row justify-center w-screen h-screen">
-          <div className="bg-white pt-8 rounded-lg shadow-md">
-            <div className="flex flex-col mb-4 justify-center items-center">
-              <h1 className="text-xl font-semibold ">Market Trade</h1>
+    <div className="bg-stone-100 h-screen">
+      <div className="flex flex-row justify-center">
+        <div className="flex flex-col items-center bg-white shadow-lg md:m-8 rounded-lg border-l-8 border-solid border-gray-300">
+          <div className="flex flex-row justify-between w-full">
+            <i
+              data-testid="back-button"
+              onClick={() => navigate("/home")}
+              className="m-3 p-3 fa-solid fa-arrow-left text-xl rounded-full hover:bg-gray-100 hover:cursor-pointer"
+            ></i>
+            <div className="flex flex-row items-center justify-center m-5 mb-2">
+              <p className="text-center text-2xl font-bold">Market Trade</p>
+              <i className="text-3xl text-gray-800 fa-solid fa-circle-arrow-right p-2"></i>
             </div>
-            <div className="px-10 rounded-full">
-              <p className="font-bold block text-sm text-gray-700 mb-3">Buy</p>
-              <div
-                onClick={() => navigate("/trade/buy")}
-                className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
-              >
-                <i className="text-3xl text-gray-800 fa-solid fa-arrow-right p-7"></i>
-                <div>
-                  <p className="font-bold mt-3">Buy items</p>
-                  <div className="text-xs">Buy items from the Steam Market</div>
+            <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />
+          </div>
+          <div>Buy/Sell</div>
+          <div className="flex flex-col justify-center items-center md:mx-20">
+            <div className="flex flex-col md:flex-row items-center justify-center">
+              <div className="flex flex-row items-center justify-center m-2">
+                {/* Dropdown */}
+                <div className="dropdown text-center">
+                  <button
+                    className="btn btn-secondary text-white w-40 rounded-lg text-center"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    {steamItem || "Select Item"}
+                  </button>
+                  {isOpen && (
+                    <ul className="dropdown-content menu shadow bg-base-100 rounded-box md:w-48">
+                      {marketItems.map((item) => (
+                        <li key={item}>
+                          <button onClick={() => handleSteamItem(item)}>
+                            {item}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
-              <p className="font-bold block text-sm text-gray-700 mb-3">Sell</p>
-              <div
-                onClick={() => navigate("/trade/sell")}
-                className="flex flex-row justify-left border border-solid shadow-md rounded-xl p-5 m-5 hover:cursor-pointer"
-              >
-                <i className="text-3xl text-gray-800 fa-solid fa-arrow-left p-7"></i>
-                <div>
-                  <p className="font-bold mt-3">Sell items</p>
-                  <div className="text-xs">Sell items to the Steam Market</div>
-                </div>
+              <div className="m-2">
+                <input
+                  placeholder="Price"
+                  value={strPrice}
+                  onChange={(e) => setStrPrice(e.target.value)}
+                  className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
+                />
+              </div>
+              <div className="m-2">
+                <input
+                  placeholder="Quantity"
+                  value={quantity}
+                  onChange={(e) => handleQuantityChange(e)}
+                  className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
+                />
               </div>
             </div>
+            <button
+              data-testid="buy-button"
+              onClick={() => handleBuy()}
+              className="btn rounded-full w-52 mb-16 bg-gray-900 text-white"
+            >
+              Buy
+            </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
