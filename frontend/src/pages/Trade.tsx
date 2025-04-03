@@ -88,23 +88,33 @@ const Trade = () => {
             <p>&lt; Item Name &gt;</p>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
-          <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
+          <div className="flex flex-row justify-between items-center w-full px-8">
             <div>Action</div>
-            <div>
+            <div className="w-1/3">
               <button
-                className={buyState ? "btn bg-green-500" : "btn"}
+                className={
+                  buyState
+                    ? "btn rounded-l-xl w-1/2 bg-green-500 hover:bg-green-500"
+                    : "btn rounded-l-xl w-1/2"
+                }
                 onClick={() => setBuyState(true)}
               >
                 Buy
               </button>
               <button
-                className={buyState ? "btn" : "btn bg-red-500"}
+                className={
+                  buyState
+                    ? "btn rounded-r-xl w-1/2"
+                    : "btn rounded-r-xl w-1/2 bg-red-500 hover:bg-red-500"
+                }
                 onClick={() => setBuyState(false)}
               >
                 Sell
               </button>
             </div>
           </div>
+          <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
+          <div>Current Position</div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-col justify-center items-center md:mx-20">
             <div className="flex flex-col md:flex-row items-center justify-center">
@@ -151,7 +161,7 @@ const Trade = () => {
               <button
                 data-testid="buy-button"
                 onClick={() => handleBuy()}
-                className="btn rounded-full w-52 mb-16 bg-green-700 text-white"
+                className="btn rounded-full w-52 mb-16 bg-green-600 text-white"
               >
                 Buy
               </button>
@@ -159,7 +169,7 @@ const Trade = () => {
               <button
                 data-testid="buy-button"
                 onClick={() => handleBuy()}
-                className="btn rounded-full w-52 mb-16 bg-red-700 text-white"
+                className="btn rounded-full w-52 mb-16 bg-red-600 text-white"
               >
                 Sell
               </button>
