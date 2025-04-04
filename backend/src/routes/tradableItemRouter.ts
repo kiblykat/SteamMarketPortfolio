@@ -1,6 +1,13 @@
 import express from "express";
-import { findTradableItemByName } from "../controllers/tradableItemController";
+import {
+  findTradableItemByName,
+  createTradableItem,
+} from "../controllers/tradableItemController";
 
-const TradableItemRouter = express.Router();
+const tradableItemRouter = express.Router();
 
-TradableItemRouter.get("/:item", findTradableItemByName);
+// endpoint: /tradableItems
+tradableItemRouter.get("/:item", findTradableItemByName);
+tradableItemRouter.post("/create", createTradableItem);
+
+export default tradableItemRouter;

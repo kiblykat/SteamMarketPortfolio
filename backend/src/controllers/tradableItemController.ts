@@ -37,3 +37,29 @@ export const findTradableItemByName = async (
     res.status(500).json({ error: "Server error occurred." });
   }
 };
+
+export const createTradableItem = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { itemName, imageUrl, releaseDate } = req.body;
+
+    if (!itemName) {
+      res.status(400).json({ message: "Item name is required" });
+      return;
+    }
+
+    const newItem = new TradableItem({
+      itemName,
+      imageUrl,
+      releaseDate,
+    });
+
+    await newItem.save();
+    res.status(201).json(newItem);
+  } catch (error) {
+    console.error("Error creating tradable item:", error);
+    res.status(500).json({ message: "Error creating tradable item", error });
+  }
+};
