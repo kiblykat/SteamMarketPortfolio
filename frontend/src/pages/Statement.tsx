@@ -63,7 +63,9 @@ const Statement = () => {
                       }
                     >
                       {transaction.type == "SELL" ? "+ " : "- "}$
-                      {Math.abs(transaction.price).toFixed(2)}
+                      {(
+                        Math.abs(transaction.price) * transaction.quantity
+                      ).toFixed(2)}
                     </td>
                     <td> {transaction.quantity}</td>
                   </tr>
