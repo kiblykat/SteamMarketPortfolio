@@ -6,4 +6,4 @@ const TradableItemSchema = new mongoose.Schema({
   releaseDate: { type: Date }, // Release date of the item
 });
 
-export const TradableItem = mongoose.model("TradableItem", TradableItemSchema);
+export const TradableItem = mongoose.model("tradable_item", TradableItemSchema);

@@ -14,15 +14,15 @@ export const findTradableItemByName = async (
     const { itemName } = req.params;
     const startMatchQuery = `^ ${escapeRegex(itemName)}`; //include space in regex query since leetcode_db has space before every start of question
 
-    // Use a case-insensitive regex to find partial matches in the 'Question' field
+    // Use a case-insensitive regex to find partial matches in the 'itemName' field
     const startMatches = await TradableItem.find({
-      Question: { $regex: startMatchQuery, $options: "im" },
+      itemName: { $regex: startMatchQuery, $options: "im" },
     }).limit(5);
 
     const partialMatches = await TradableItem.aggregate([
       {
         $match: {
-          Question: { $regex: escapeRegex(itemName), $options: "im" },
+          itemName: { $regex: escapeRegex(itemName), $options: "im" },
           _id: { $nin: startMatches.map((match) => match._id) },
         },
       },

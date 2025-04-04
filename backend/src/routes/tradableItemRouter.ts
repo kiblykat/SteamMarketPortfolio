@@ -7,7 +7,7 @@ import {
 const tradableItemRouter = express.Router();
 
 // endpoint: /tradableItems
-tradableItemRouter.get("/:item", findTradableItemByName);
+tradableItemRouter.get("/:itemName", findTradableItemByName);
 tradableItemRouter.post("/create", createTradableItem);
 
 export default tradableItemRouter;
