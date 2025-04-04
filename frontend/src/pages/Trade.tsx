@@ -138,10 +138,13 @@ const Trade = () => {
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
             {itemUrlName ? (
-              <>
-                <p className="text-xl font-semibold">{itemUrlName}</p>
-                <img src={itemImageUrl} className="rounded-full w-1/3 m-4" />
-              </>
+              <div
+                onClick={() => navigate("/trade")}
+                className="flex flex-row justify-between items-center  hover:cursor-pointer"
+              >
+                <p className="text-xl font-semibold ">{itemUrlName}</p>
+                <img src={itemImageUrl} className="rounded-full w-1/4 m-4" />
+              </div>
             ) : (
               <div className="flex flex-col w-full">
                 <input
