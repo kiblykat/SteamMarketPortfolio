@@ -2,71 +2,14 @@ import { useContext, useEffect } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Portfolio from "../components/Portfolio";
-import transactionAPI from "../api/api";
 
 const Home = () => {
   const navigate = useNavigate();
   const globalContext = useContext(GlobalContext);
-  const {
-    setActiveTab,
-    portfolio,
-    setPortfolio,
-    currentSteamPrices,
-    setCurrentSteamPrices,
-  } = globalContext;
+  const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
 
   useEffect(() => {
     setActiveTab("Home");
-    async function generatePortfolio() {
-      try {
-        const portfolioRes = await transactionAPI.get<
-          Array<{
-            itemName: string;
-            position: number;
-            avgPrice: number;
-            realizedPL: number;
-          }>
-        >("transactions/generate-portfolio?uid=kiblykat");
-
-        const distinctNames: string[] = [
-          ...new Set(portfolioRes.data.map((item) => item.itemName)),
-        ];
-
-        const currentSteamPricesRes = await transactionAPI.get(
-          `steamPrices/currentSteamPrices?items=${JSON.stringify(
-            distinctNames
-          )}`
-        );
-        setCurrentSteamPrices(currentSteamPricesRes.data);
-        localStorage.setItem(
-          "currentSteamPrices",
-          JSON.stringify(currentSteamPricesRes.data)
-        ); // Update localStorage
-
-        const steamPricesData = currentSteamPricesRes.data; // use steamPricesData to avoid asynchronous setState which causes issues
-
-        const portfolioResWithPL = portfolioRes.data.map((item) => {
-          return {
-            ...item,
-            PL:
-              item.position * steamPricesData[item.itemName] -
-              item.position * item.avgPrice +
-              item.realizedPL,
-          };
-        });
-
-        portfolioResWithPL.sort(
-          (a, b) => a.itemName.localeCompare(b.itemName) // Sort by itemName
-        );
-
-        localStorage.setItem("portfolio", JSON.stringify(portfolioResWithPL)); // Update localStorage
-
-        setPortfolio(portfolioResWithPL);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    generatePortfolio();
   }, [setActiveTab]);
 
   return (

@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import transactionAPI from "./api/api";
 import {
   GlobalContextType,
   initialGlobalState,
@@ -24,11 +25,76 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       realizedPL: number;
       PL: number;
     }[]
-  >([]);
+  >(() => {
+    const storedPortfolio = localStorage.getItem("portfolio");
+    return storedPortfolio ? JSON.parse(storedPortfolio) : [];
+  });
 
   const [currentSteamPrices, setCurrentSteamPrices] = useState<
     Record<string, number>
-  >({});
+  >(() => {
+    const storedCurrentSteamPrices = localStorage.getItem("currentSteamPrices");
+    return storedCurrentSteamPrices ? JSON.parse(storedCurrentSteamPrices) : {};
+  });
+
+  async function generatePortfolio() {
+    try {
+      const portfolioRes = await transactionAPI.get<
+        Array<{
+          itemName: string;
+          position: number;
+          avgPrice: number;
+          realizedPL: number;
+        }>
+      >("transactions/generate-portfolio?uid=kiblykat");
+
+      const distinctNames: string[] = [
+        ...new Set(portfolioRes.data.map((item) => item.itemName)),
+      ];
+
+      const currentSteamPricesRes = await transactionAPI.get(
+        `steamPrices/currentSteamPrices?items=${JSON.stringify(distinctNames)}`
+      );
+      setCurrentSteamPrices(currentSteamPricesRes.data);
+      localStorage.setItem(
+        "currentSteamPrices",
+        JSON.stringify(currentSteamPricesRes.data)
+      ); // Update localStorage
+
+      const steamPricesData = currentSteamPricesRes.data; // use steamPricesData to avoid asynchronous setState which causes issues
+
+      const portfolioResWithPL = portfolioRes.data.map((item) => {
+        return {
+          ...item,
+          PL:
+            item.position * steamPricesData[item.itemName] -
+            item.position * item.avgPrice +
+            item.realizedPL,
+        };
+      });
+
+      portfolioResWithPL.sort(
+        (a, b) => a.itemName.localeCompare(b.itemName) // Sort by itemName
+      );
+
+      localStorage.setItem("portfolio", JSON.stringify(portfolioResWithPL)); // Update localStorage
+
+      setPortfolio(portfolioResWithPL);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    generatePortfolio();
+
+    const interval = setInterval(() => {
+      generatePortfolio(); // Fetch fresh data every 30 seconds
+    }, 30000);
+
+    return () => clearInterval(interval); // Cleanup interval on unmount
+  }, []);
+
   const context = {
     activeTab,
     setActiveTab,
