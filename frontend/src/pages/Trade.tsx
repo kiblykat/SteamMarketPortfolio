@@ -12,7 +12,8 @@ const Trade = () => {
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
-  const [itemName, setItemName] = useState<string>(""); // true for buy, false for sell
+  const [itemName, setItemName] = useState<string>("");
+  const [itemImageUrl, setItemImageUrl] = useState<string>("");
   const [results, setResults] = useState<
     { imageUrl: string; itemName: string; releaseDate: string }[]
   >([]);
@@ -51,9 +52,10 @@ const Trade = () => {
       setQuantity(newValue === "" ? "" : Number(newValue));
     }
   };
-  const handleSelect = (item: string) => {
+  const handleSelect = (item: string, imageUrl: string) => {
     navigate(`/trade/${item}`);
     setItemName(item);
+    setItemImageUrl(imageUrl);
     setIsOpen(false);
   };
 
@@ -136,7 +138,10 @@ const Trade = () => {
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
             {itemUrlName ? (
-              <p className="text-xl font-semibold">{itemUrlName}</p>
+              <>
+                <p className="text-xl font-semibold">{itemUrlName}</p>
+                <img src={itemImageUrl} className="rounded-full w-1/3 m-4" />
+              </>
             ) : (
               <div className="flex flex-col w-full">
                 <input
@@ -151,7 +156,9 @@ const Trade = () => {
                       <li
                         key={item.itemName}
                         className="p-2 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleSelect(item.itemName)}
+                        onClick={() =>
+                          handleSelect(item.itemName, item.imageUrl)
+                        }
                       >
                         {item.itemName}
                       </li>
