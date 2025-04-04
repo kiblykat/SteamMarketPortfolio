@@ -38,6 +38,11 @@ const Home = () => {
           )}`
         );
         setCurrentSteamPrices(currentSteamPricesRes.data);
+        localStorage.setItem(
+          "currentSteamPrices",
+          JSON.stringify(currentSteamPricesRes.data)
+        ); // Update localStorage
+
         const steamPricesData = currentSteamPricesRes.data; // use steamPricesData to avoid asynchronous setState which causes issues
 
         const portfolioResWithPL = portfolioRes.data.map((item) => {
@@ -53,6 +58,8 @@ const Home = () => {
         portfolioResWithPL.sort(
           (a, b) => a.itemName.localeCompare(b.itemName) // Sort by itemName
         );
+
+        localStorage.setItem("portfolio", JSON.stringify(portfolioResWithPL)); // Update localStorage
 
         setPortfolio(portfolioResWithPL);
       } catch (err) {

@@ -134,14 +134,18 @@ const Trade = () => {
           <div className="flex flex-row justify-between items-center w-full px-8">
             <div>Current Position</div>
             <div className="font-semibold text-xl">
-              {portfolio.find((item) => item.itemName == itemUrlName)?.position}
+              {
+                JSON.parse(localStorage.getItem("portfolio") || "[]").find(
+                  (item) => item.itemName == itemUrlName
+                )?.position
+              }
             </div>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8">
             <div>Avg. Price</div>
             <div className="font-semibold text-xl">
-              {portfolio
+              {JSON.parse(localStorage.getItem("portfolio") || "[]")
                 .find((item) => item.itemName == itemUrlName)
                 ?.avgPrice.toFixed(2)}
             </div>
@@ -150,7 +154,11 @@ const Trade = () => {
           <div className="flex flex-row justify-between items-center w-full px-8">
             <div>Curr. Steam Price</div>
             <div className="font-semibold text-xl">
-              {currentSteamPrices[itemUrlName]}
+              {
+                JSON.parse(localStorage.getItem("currentSteamPrices") || "[]")[
+                  itemUrlName
+                ]
+              }
             </div>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
