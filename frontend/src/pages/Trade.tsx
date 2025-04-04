@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import transactionAPI from "../api/api";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import GlobalContext from "../GlobalContext";
 
 const Trade = () => {
@@ -18,6 +18,7 @@ const Trade = () => {
     { imageUrl: string; itemName: string; releaseDate: string }[]
   >([]);
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -42,8 +43,10 @@ const Trade = () => {
       setResults([]);
     }
   };
+
   useEffect(() => {
     setActiveTab("Trade");
+    inputRef.current?.focus(); // focus on the input field when the component mounts
   }, [navigate, setActiveTab]);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,6 +151,7 @@ const Trade = () => {
             ) : (
               <div className="flex flex-col w-full">
                 <input
+                  ref={inputRef}
                   placeholder="Type item name"
                   value={itemName}
                   onChange={(e) => setItemName(e.target.value)}
