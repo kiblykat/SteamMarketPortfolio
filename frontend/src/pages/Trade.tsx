@@ -80,7 +80,7 @@ const Trade = () => {
 
     await transactionAPI.post("transactions/create", {
       uid: "kiblykat",
-      itemUrlName,
+      steamItem: itemUrlName,
       price,
       type,
       quantity,
