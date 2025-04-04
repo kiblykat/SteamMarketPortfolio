@@ -9,20 +9,52 @@ const Trade = () => {
   const { itemUrlName } = useParams() as { itemUrlName: string };
   const globalContext = useContext(GlobalContext);
   const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
-
-  useEffect(() => {
-    setActiveTab("Trade");
-  }, [navigate, setActiveTab]);
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
   const [itemName, setItemName] = useState<string>(""); // true for buy, false for sell
+  const [results, setResults] = useState<
+    { imageUrl: string; itemName: string; releaseDate: string }[]
+  >([]);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (itemName.trim().length > 0) {
+        fetchItems(itemName);
+      } else {
+        setResults([]);
+        setIsOpen(false);
+      }
+    }, 300); // debounce input by 300ms
+
+    return () => clearTimeout(delayDebounceFn); //return function runs when useEffect runs again (based on dependency array)
+  }, [itemName]);
+
+  const fetchItems = async (searchText: string) => {
+    try {
+      const res = await transactionAPI.get(`/tradableItems/${searchText}`);
+      setResults(res.data); // assuming backend returns string[]
+      setIsOpen(true);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setResults([]);
+    }
+  };
+  useEffect(() => {
+    setActiveTab("Trade");
+  }, [navigate, setActiveTab]);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     if (newValue === "" || !isNaN(Number(newValue))) {
       setQuantity(newValue === "" ? "" : Number(newValue));
     }
+  };
+  const handleSelect = (item: string) => {
+    navigate(`/trade/${item}`);
+    setItemName(item);
+    setIsOpen(false);
   };
 
   const handleBuy = async (): Promise<void> => {
@@ -106,12 +138,27 @@ const Trade = () => {
             {itemUrlName ? (
               <p className="text-xl font-semibold">{itemUrlName}</p>
             ) : (
-              <input
-                placeholder="Type item name"
-                value={itemName}
-                onChange={(e) => setItemName(e.target.value)}
-                className="py-10 input border border-gray-300 rounded-xl text-xl w-full"
-              />
+              <div className="flex flex-col w-full">
+                <input
+                  placeholder="Type item name"
+                  value={itemName}
+                  onChange={(e) => setItemName(e.target.value)}
+                  className="py-10 input border border-gray-300 rounded-xl text-xl w-full"
+                />
+                {isOpen && results.length > 0 && (
+                  <ul className="z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {results.map((item) => (
+                      <li
+                        key={item.itemName}
+                        className="p-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleSelect(item.itemName)}
+                      >
+                        {item.itemName}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
