@@ -32,6 +32,7 @@ function App() {
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
         <Route path="/statement" element={<Statement />} />
+        <Route path="/trade/" element={<Trade />} />
         <Route path="/trade/:itemUrlName" element={<Trade />} />
       </Routes>
     </HashRouter>

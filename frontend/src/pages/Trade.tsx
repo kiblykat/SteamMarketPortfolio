@@ -16,6 +16,7 @@ const Trade = () => {
   const [strPrice, setStrPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
+  const [itemName, setItemName] = useState<string>(""); // true for buy, false for sell
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -102,7 +103,16 @@ const Trade = () => {
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
-            <p className="text-xl font-semibold">{itemUrlName}</p>
+            {itemUrlName ? (
+              <p className="text-xl font-semibold">{itemUrlName}</p>
+            ) : (
+              <input
+                placeholder="Type item name"
+                value={itemName}
+                onChange={(e) => setItemName(e.target.value)}
+                className="py-10 input border border-gray-300 rounded-xl text-xl w-full"
+              />
+            )}
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8">
