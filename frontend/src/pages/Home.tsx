@@ -23,6 +23,13 @@ const Home = () => {
               <h1 className=" text-6xl font-semibold">
                 ${portfolio.reduce((acc, curr) => acc + curr.PL, 0).toFixed(2)}
               </h1>
+              <hr></hr>
+              <p className="flex justify-end mt-2 text-2xl font-semibold">
+                Deposit: $
+                {portfolio
+                  .reduce((acc, curr) => acc + curr.avgPrice * curr.position, 0)
+                  .toFixed(2)}
+              </p>
               <button
                 onClick={() => navigate("/trade")}
                 className="btn rounded-full w-52 mt-16 bg-gray-900 text-white"
