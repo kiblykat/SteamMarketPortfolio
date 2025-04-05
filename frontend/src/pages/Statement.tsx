@@ -62,7 +62,6 @@ const Statement = () => {
                           : "text-error"
                       }
                     >
-                      {transaction.type == "SELL" ? "+ " : "- "}$
                       {(
                         Math.abs(transaction.price) * transaction.quantity
                       ).toFixed(2)}
