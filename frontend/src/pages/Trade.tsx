@@ -73,7 +73,7 @@ const Trade = () => {
     }
 
     const price = parseFloat(strPrice);
-    if (isNaN(price) || price <= 0) {
+    if (isNaN(price) || price < 0) {
       toast.error("Please enter a valid price");
       return;
     }
