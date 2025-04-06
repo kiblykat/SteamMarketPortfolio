@@ -6,7 +6,33 @@ const escapeRegex = (str: string) => {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 };
 
-export const findTradableItemByName = async (
+export const findSingleTradableItemByName = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { itemName } = req.params;
+    const escapedItemName = escapeRegex(itemName);
+
+    // Use a case-insensitive regex to find the exact match in the 'itemName' field
+    const tradableItem = await TradableItem.findOne({
+      itemName: { $regex: escapedItemName, $options: "im" },
+    });
+
+    if (!tradableItem) {
+      res.status(404).json({ message: "Item not found" });
+      return;
+    }
+
+    res.status(200).json(tradableItem);
+  } catch (err) {
+    // Log the error for debugging
+    console.error("Error fetching tradable item:", err);
+    res.status(500).json({ error: "Server error occurred." });
+  }
+};
+
+export const findArrayTradableItemByName = async (
   req: Request,
   res: Response
 ): Promise<void> => {
