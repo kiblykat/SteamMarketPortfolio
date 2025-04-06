@@ -9,7 +9,7 @@ const Trade = () => {
   const { itemUrlName } = useParams() as { itemUrlName: string };
   const globalContext = useContext(GlobalContext);
   const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
-  const [strPrice, setStrPrice] = useState<string>("");
+  const [strTotalPrice, setStrTotalPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number | "">("");
   const [buyState, setBuyState] = useState<boolean>(true); // true for buy, false for sell
   const [itemName, setItemName] = useState<string>("");
@@ -65,19 +65,20 @@ const Trade = () => {
   const handleBuy = async (): Promise<void> => {
     const type = "BUY";
     //check if the input matches a valid number format
-    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
+    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strTotalPrice);
 
     if (!isValidPriceFormat) {
       toast.error("Please enter a valid price");
       return;
     }
 
-    const price = parseFloat(strPrice);
-    if (isNaN(price) || price < 0) {
-      toast.error("Please enter a valid price");
+    const totalPrice = parseFloat(strTotalPrice);
+    if (isNaN(totalPrice) || totalPrice < 0) {
+      toast.error("Please enter a valid total price");
       return;
     }
 
+    const price = totalPrice / Number(quantity);
     await transactionAPI.post("transactions/create", {
       uid: "kiblykat",
       steamItem: itemUrlName,
@@ -95,14 +96,14 @@ const Trade = () => {
   const handleSell = async (): Promise<void> => {
     const type = "SELL";
     //check if the input matches a valid number format
-    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strPrice);
+    const isValidPriceFormat = /^\d*\.?\d{0,2}$/.test(strTotalPrice);
 
     if (!isValidPriceFormat) {
       toast.error("Please enter a valid price");
       return;
     }
 
-    const price = parseFloat(strPrice);
+    const price = parseFloat(strTotalPrice);
     if (isNaN(price) || price <= 0) {
       toast.error("Please enter a valid price");
       return;
@@ -230,8 +231,8 @@ const Trade = () => {
               <div className="m-2">
                 <input
                   placeholder="Price"
-                  value={strPrice}
-                  onChange={(e) => setStrPrice(e.target.value)}
+                  value={strTotalPrice}
+                  onChange={(e) => setStrTotalPrice(e.target.value)}
                   className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
                 />
               </div>
