@@ -230,7 +230,7 @@ const Trade = () => {
             <div className="flex flex-col md:flex-row justify-between">
               <div className="m-2">
                 <input
-                  placeholder="Price"
+                  placeholder="Total Price"
                   value={strTotalPrice}
                   onChange={(e) => setStrTotalPrice(e.target.value)}
                   className="py-10 input border border-gray-300 rounded-xl text-xl md:w-48"
