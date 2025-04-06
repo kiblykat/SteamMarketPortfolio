@@ -44,10 +44,24 @@ const Trade = () => {
     }
   };
 
+  const fetchCurrentItem = async (itemName: string) => {
+    try {
+      const res = await transactionAPI.get(`/tradableItems/single/${itemName}`);
+      setItemImageUrl(res.data.imageUrl); // assuming backend returns string[]
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+
   useEffect(() => {
     setActiveTab("Trade");
-    inputRef.current?.focus(); // focus on the input field when the component mounts
-  }, [navigate, setActiveTab]);
+    if (itemUrlName) {
+      fetchCurrentItem(itemUrlName);
+      setIsOpen(false);
+    } else {
+      inputRef.current?.focus(); // focus on the input field when the component mounts
+    }
+  }, [itemUrlName, setActiveTab]);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -137,7 +151,7 @@ const Trade = () => {
               <p className="text-center text-2xl font-bold">Market Trade</p>
               <i className="text-3xl text-gray-800 fa-solid fa-circle-arrow-right p-2"></i>
             </div>
-            <img src="/steam.png" className="rounded-full w-8 h-8 m-4" />
+            <div></div>
           </div>
           <hr className=" border-gray-200 w-full my-4 mx-4 px-4" />
           <div className="flex flex-row justify-between items-center w-full px-8 rounded-t-lg">
@@ -147,7 +161,9 @@ const Trade = () => {
                 className="flex flex-row justify-between items-center  hover:cursor-pointer"
               >
                 <p className="text-xl font-semibold ">{itemUrlName}</p>
-                <img src={itemImageUrl} className="rounded-full w-1/4 m-4" />
+                {itemImageUrl && (
+                  <img src={itemImageUrl} className="rounded-full w-1/4 m-4" />
+                )}
               </div>
             ) : (
               <div className="flex flex-col w-full">
