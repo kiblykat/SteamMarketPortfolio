@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "src/cron/retrievePL",
+      "path": "/src/cron/retrievePL",
       "schedule": "0 5 * * *"
     }
   ]
