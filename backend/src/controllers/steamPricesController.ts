@@ -24,6 +24,8 @@ export const getCurrentSteamPrices = async (
       "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176091756",
     "Horizon Case":
       "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=175999886",
+    "Recoil Case":
+      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176321160",
   };
 
   try {
@@ -47,9 +49,7 @@ export const getCurrentSteamPrices = async (
         const response = await axios.get(hash[itemName]);
         const data = response.data;
         const price =
-          String(
-            ((parseInt(data.lowest_sell_order) / 100) * 0.75).toFixed(2)
-          ) || "N/A";
+          String((parseInt(data.lowest_sell_order) / 115).toFixed(2)) || "N/A"; // quicksell calculation takes into account 15% fees by steam (DOTA2, CS:GO, TF2)
         priceResults[itemName] = price;
       } catch (error) {
         priceResults[itemName] = "Error fetching price";
