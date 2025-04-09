@@ -102,7 +102,9 @@ const Trade = () => {
     });
 
     toast.success(
-      `You have bought ${quantity} ${itemUrlName}s for $${price} each`
+      `You have bought ${quantity} ${itemUrlName}s for $${price.toFixed(
+        2
+      )} each`
     );
     // navigate("/trade"); // navigate back to trade page after successful buy
   };
