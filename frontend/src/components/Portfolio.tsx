@@ -27,7 +27,10 @@ const Portfolio: React.FC<PortfolioProps> = ({
               <tr>
                 <th>Item</th>
                 <th>Position | Mkt</th>
-                <th>Curr | Avg Price</th>
+                <th className="flex flex-row items-center gap-2">
+                  <span>Curr | Avg Price</span>
+                  <i className="text-lg fa-solid fa-circle-question hover:text-blue-500 hover:cursor-pointer" />
+                </th>
                 <th>P&L</th>
                 <th>Realized P&L</th>
               </tr>
