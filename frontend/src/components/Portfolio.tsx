@@ -17,7 +17,7 @@ const Portfolio: React.FC<PortfolioProps> = ({
   portfolio,
   currentSteamPrices,
 }) => {
-  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const handleOverlay = () => {
     setPopupVisible(true);
   };
@@ -103,7 +103,12 @@ const Portfolio: React.FC<PortfolioProps> = ({
           </div>
         </div>
       </div>
-      {popupVisible && <InfoPopup />}
+      {popupVisible && (
+        <InfoPopup
+          setPopupVisible={setPopupVisible}
+          popupVisible={popupVisible}
+        />
+      )}
     </>
   );
 };
