@@ -46,7 +46,10 @@ export const getCurrentSteamPrices = async (
       try {
         const response = await axios.get(hash[itemName]);
         const data = response.data;
-        const price = parseInt(data.lowest_sell_order) / 100 || "N/A";
+        const price =
+          String(
+            ((parseInt(data.lowest_sell_order) / 100) * 0.75).toFixed(2)
+          ) || "N/A";
         priceResults[itemName] = price;
       } catch (error) {
         priceResults[itemName] = "Error fetching price";
