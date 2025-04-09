@@ -79,7 +79,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
       localStorage.setItem("portfolio", JSON.stringify(portfolioResWithPL)); // Update localStorage
 
-      setPortfolio(portfolioResWithPL);
+      setPortfolio(portfolioResWithPL); //add PL data to portfolio state
     } catch (err) {
       console.error(err);
     }

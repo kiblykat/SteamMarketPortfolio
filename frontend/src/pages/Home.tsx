@@ -18,7 +18,13 @@ const Home = () => {
         <div className="grid grid-cols-4">
           <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-2 mx-12 md:ml-12 md:mr-4 mt-12 border border-gray-300">
             <div className="card-body">
-              <div className="card-title">Steam Profit</div>
+              <div className="card-title">
+                Steam Profit
+                <span>
+                  <i className="text-lg fa-solid fa-circle-question hover:text-blue-500 hover:cursor-pointer" />
+                </span>
+              </div>
+
               <hr></hr>
               <h1 className=" text-6xl font-semibold">
                 ${portfolio.reduce((acc, curr) => acc + curr.PL, 0).toFixed(2)}
