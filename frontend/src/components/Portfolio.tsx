@@ -106,7 +106,6 @@ const Portfolio: React.FC<PortfolioProps> = ({
       {popupVisible && (
         <InfoPopup
           setPopupVisible={setPopupVisible}
-          popupVisible={popupVisible}
           text="Curr. Price is Steam Market's lowest_sell_order/1.15 to simulate market revenue at quicksell price less 15% market fees. Avg. Price is the average price of your position."
         />
       )}

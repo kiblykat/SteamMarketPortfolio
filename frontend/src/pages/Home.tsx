@@ -1,10 +1,13 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Portfolio from "../components/Portfolio";
+import InfoPopup from "../components/InfoPopup";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [popupVisible, setPopupVisible] = useState<boolean>(false);
+
   const globalContext = useContext(GlobalContext);
   const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
 
@@ -21,7 +24,10 @@ const Home = () => {
               <div className="card-title">
                 Steam Profit
                 <span>
-                  <i className="text-lg fa-solid fa-circle-question hover:text-blue-500 hover:cursor-pointer" />
+                  <i
+                    className="text-lg fa-solid fa-circle-question hover:text-blue-500 hover:cursor-pointer"
+                    onClick={() => setPopupVisible(true)}
+                  />
                 </span>
               </div>
 
@@ -85,6 +91,12 @@ const Home = () => {
           />
         </div>
       </div>
+      {popupVisible && (
+        <InfoPopup
+          setPopupVisible={setPopupVisible}
+          text="Steam Profit is calculated by taking the total_revenue - total_deposit. total_revenue = realized + unrealized P&L. Deposit refers to the total amount of money you have put into the account."
+        />
+      )}
     </>
   );
 };

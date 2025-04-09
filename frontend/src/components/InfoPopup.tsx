@@ -1,6 +1,5 @@
 interface InfoPopupProps {
   setPopupVisible: (visible: boolean) => void;
-  popupVisible: boolean;
   text: string;
 }
 
