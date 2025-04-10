@@ -1,33 +1,11 @@
-import axios from "axios";
 import { Request, Response } from "express";
+import { fetchCurrentSteamPrices } from "../services/fetchCurrentSteamPrices";
 
+// This function calls the fetchCurrentSteamPrices service to get the current prices of CS:GO cases from SCM.
 export const getCurrentSteamPrices = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const hash: Record<string, string> = {
-    "Snakebite Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176240926",
-    "Fracture Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176185874",
-    "Prisma Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176042493",
-    "Clutch Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=175966708",
-    "Danger Zone Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176024744",
-    "Shadow Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=67060949",
-    "Prisma 2 Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176118270",
-    "CS20 Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176091756",
-    "Horizon Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=175999886",
-    "Recoil Case":
-      "https://steamcommunity.com/market/itemordershistogram?country=SG&language=english&currency=13&item_nameid=176321160",
-  };
-
   try {
     const queryParams = req.query.items as string; // Expecting a JSON string array
     const itemNames: string[] = JSON.parse(queryParams);
@@ -37,29 +15,7 @@ export const getCurrentSteamPrices = async (
       return;
     }
 
-    const priceResults: Record<string, number | string> = {};
-    let count = 0;
-    for (const itemName of itemNames) {
-      if (!hash[itemName]) {
-        priceResults[itemName] = 0;
-        continue;
-      }
-
-      try {
-        const response = await axios.get(hash[itemName]);
-        const data = response.data;
-        const price =
-          String((parseInt(data.lowest_sell_order) / 115).toFixed(2)) || "N/A"; // quicksell calculation takes into account 15% fees by steam (DOTA2, CS:GO, TF2)
-        priceResults[itemName] = price;
-      } catch (error) {
-        priceResults[itemName] = "Error fetching price";
-        console.log(
-          `Error fetching price for ${itemName}:`,
-          (error as Error).message
-        );
-      }
-    }
-
+    const priceResults = await fetchCurrentSteamPrices(itemNames);
     res.status(200).json(priceResults);
   } catch (error) {
     console.error("Error processing request:", error);
