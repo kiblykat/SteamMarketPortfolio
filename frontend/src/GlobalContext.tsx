@@ -45,41 +45,19 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
           position: number;
           avgPrice: number;
           realizedPL: number;
+          PL: number;
         }>
       >("transactions/generate-portfolio?uid=kiblykat");
 
-      const distinctNames: string[] = [
-        ...new Set(portfolioRes.data.map((item) => item.itemName)),
-      ];
+      const portfolioResData = portfolioRes.data;
 
-      const currentSteamPricesRes = await transactionAPI.get(
-        `steamPrices/currentSteamPrices?items=${JSON.stringify(distinctNames)}`
-      );
-      setCurrentSteamPrices(currentSteamPricesRes.data);
-      localStorage.setItem(
-        "currentSteamPrices",
-        JSON.stringify(currentSteamPricesRes.data)
-      ); // Update localStorage
-
-      const steamPricesData = currentSteamPricesRes.data; // use steamPricesData to avoid asynchronous setState which causes issues
-
-      const portfolioResWithPL = portfolioRes.data.map((item) => {
-        return {
-          ...item,
-          PL:
-            item.position * steamPricesData[item.itemName] -
-            item.position * item.avgPrice +
-            item.realizedPL,
-        };
-      });
-
-      portfolioResWithPL.sort(
+      portfolioResData.sort(
         (a, b) => a.itemName.localeCompare(b.itemName) // Sort by itemName
       );
 
-      localStorage.setItem("portfolio", JSON.stringify(portfolioResWithPL)); // Update localStorage
+      localStorage.setItem("portfolio", JSON.stringify(portfolioResData)); // Update localStorage
 
-      setPortfolio(portfolioResWithPL); //add PL data to portfolio state
+      setPortfolio(portfolioResData); //add PL data to portfolio state
     } catch (err) {
       console.error(err);
     }
