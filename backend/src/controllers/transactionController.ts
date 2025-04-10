@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Transaction } from "../models/Transaction";
+import { fetchCurrentSteamPrices } from "../services/fetchCurrentSteamPrices";
 
 // Create Transaction
 export const createTransaction = async (
@@ -181,6 +182,7 @@ export const getAveragePrices = async (req: Request, res: Response) => {
 
 // Generate Portfolio returns
 // input: [[itemName, position, avgPrice], ...]
+// output: [{ itemName: "item1", position: 10, avgPrice: 5.0, realizedPL: 100.0 },...]
 export const generatePortfolio = async (
   req: Request,
   res: Response
@@ -271,8 +273,26 @@ export const generatePortfolio = async (
       res.status(404).json({ message: "No transactions found for this user" });
       return;
     }
+    const distinctNames: string[] = result.map((item) => item.itemName);
+    const currentPrices = await fetchCurrentSteamPrices(distinctNames);
 
-    res.status(200).json(result);
+    const portfolioWithPL = result.map((item) => {
+      const currentPrice = currentPrices[item.itemName] || 0;
+      const PL =
+        item.position * Number(currentPrice) -
+        item.position * item.avgPrice +
+        item.realizedPL;
+
+      return {
+        itemName: item.itemName,
+        position: item.position,
+        avgPrice: item.avgPrice,
+        realizedPL: item.realizedPL,
+        PL: parseFloat(PL.toFixed(2)),
+      };
+    });
+
+    res.status(200).json(portfolioWithPL);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
