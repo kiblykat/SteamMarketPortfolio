@@ -1,9 +1,16 @@
 // import transactionAPI from "../api/api";
 
-export const fillPLData = async () => {
+import mongoose from "mongoose";
+import { connectDB, disconnectDB } from "../../config/db";
+import axios from "axios";
+
+const fillPLData = async () => {
   try {
-    console.log("placeholder for PL data retrieval");
+    connectDB();
+    disconnectDB();
   } catch (error) {
     console.error("Error fetching PL data:", error);
   }
 };
+
+export default fillPLData;
