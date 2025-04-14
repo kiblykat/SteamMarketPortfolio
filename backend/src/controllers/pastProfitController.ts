@@ -1,7 +1,7 @@
-import { PastProfit } from "../models/PastProfit";
+import { PortfolioHistory } from "../models/PortfolioHistory";
 import { Request, Response } from "express";
 
-export const createNewProfit = async (
+export const createNewPortfolioHistory = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -15,7 +15,7 @@ export const createNewProfit = async (
     }
 
     // Create a new PastProfit document
-    const newProfit = new PastProfit({
+    const newProfit = new PortfolioHistory({
       uid,
       itemName,
       profit,
