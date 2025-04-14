@@ -1,15 +1,17 @@
 import { Transaction } from "../models/Transaction";
 import { fetchCurrentSteamPrices } from "./fetchCurrentSteamPrices";
 
-/* returns [boolean, Portfolio[]] where Portfolio is an array of objects with the following structure:
- {
-   itemName: string;
-   position: number;
-   avgPrice: number;
-   realizedPL: number;
-   PL: number;
- } */
-const fetchPortfolio = async (uid: string) => {
+interface Portfolio {
+  itemName: string;
+  position: number;
+  avgPrice: number;
+  realizedPL: number;
+  PL: number;
+}
+
+const fetchPortfolio = async (
+  uid: string
+): Promise<[boolean, string | Portfolio[]]> => {
   const portfolioWithoutPL = await Transaction.aggregate([
     {
       $match: {

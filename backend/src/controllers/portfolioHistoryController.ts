@@ -1,40 +1,27 @@
 import { PortfolioHistory } from "../models/PortfolioHistory";
 import { Request, Response } from "express";
+import fetchPortfolio from "../services/fetchPortfolio";
+interface PortfolioWithUID {
+  itemName: string;
+  position: number;
+  avgPrice: number;
+  realizedPL: number;
+  PL: number;
+  uid: string; // Add uid property
+}
 
 export const createNewPortfolioHistory = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const { uid, itemName, position, avgPrice, realizedPL, PL } = req.body;
-
-    // Validate input data
-    if (
-      !uid ||
-      !itemName ||
-      position === undefined ||
-      avgPrice === undefined ||
-      realizedPL === undefined ||
-      PL === undefined
-    ) {
-      res.status(400).json({ message: "Missing required fields" });
-      return;
-    }
-
-    // Create a new PastProfit document
-    const newProfit = new PortfolioHistory({
-      uid,
-      itemName,
-      position,
-      avgPrice,
-      realizedPL,
-      PL,
+    const uid = process.env.UID as string; // Assuming UID is set in the environment variables
+    const portfolioWithPL = await fetchPortfolio(uid);
+    (portfolioWithPL[1] as PortfolioWithUID[]).map((item) => {
+      item.uid = uid; // Add uid to each portfolio item
     });
-
-    // Save the document to the database
-    await newProfit.save();
-
-    res.status(201).json(newProfit);
+    await PortfolioHistory.insertMany(portfolioWithPL[1]);
+    res.status(201).json(portfolioWithPL[1]);
   } catch (err) {
     console.error("Error creating past profit:", err);
     res.status(500).json({ error: "Server error occurred." });
