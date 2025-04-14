@@ -6,10 +6,17 @@ export const createNewPortfolioHistory = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { uid, itemName, profit } = req.body;
+    const { uid, itemName, position, avgPrice, realizedPL, PL } = req.body;
 
     // Validate input data
-    if (!uid || !itemName || profit === undefined) {
+    if (
+      !uid ||
+      !itemName ||
+      position === undefined ||
+      avgPrice === undefined ||
+      realizedPL === undefined ||
+      PL === undefined
+    ) {
       res.status(400).json({ message: "Missing required fields" });
       return;
     }
@@ -18,7 +25,10 @@ export const createNewPortfolioHistory = async (
     const newProfit = new PortfolioHistory({
       uid,
       itemName,
-      profit,
+      position,
+      avgPrice,
+      realizedPL,
+      PL,
     });
 
     // Save the document to the database
