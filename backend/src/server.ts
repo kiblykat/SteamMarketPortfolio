@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import transactionRouter from "./routes/transactionRouter";
 import steamPriceRouter from "./routes/steamPricesRouter";
 import tradableItemRouter from "./routes/tradableItemRouter";
-import portfolioHistoryRouter from "./routes/pastProfitRouter";
+import portfolioHistoryRouter from "./routes/portfolioHistoryRouter";
 
 dotenv.config();
 connectDB();

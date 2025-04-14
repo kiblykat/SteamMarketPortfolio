@@ -1,6 +1,6 @@
 import express from "express";
 
-import { createNewPortfolioHistory } from "../controllers/pastProfitController";
+import { createNewPortfolioHistory } from "../controllers/portfolioHistoryController";
 
 const portfolioHistoryRouter = express.Router();
 
