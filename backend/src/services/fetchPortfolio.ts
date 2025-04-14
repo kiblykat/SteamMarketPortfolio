@@ -1,7 +1,16 @@
 import { Transaction } from "../models/Transaction";
+import { fetchCurrentSteamPrices } from "./fetchCurrentSteamPrices";
 
+/* returns [boolean, Portfolio[]] where Portfolio is an array of objects with the following structure:
+ {
+   itemName: string;
+   position: number;
+   avgPrice: number;
+   realizedPL: number;
+   PL: number;
+ } */
 const fetchPortfolio = async (uid: string) => {
-  return await Transaction.aggregate([
+  const portfolioWithoutPL = await Transaction.aggregate([
     {
       $match: {
         uid: String(uid),
@@ -74,6 +83,31 @@ const fetchPortfolio = async (uid: string) => {
       },
     },
   ]);
+
+  if (portfolioWithoutPL.length === 0) {
+    return [false, "No transactions found for this user"];
+  }
+  const distinctNames: string[] = portfolioWithoutPL.map(
+    (item) => item.itemName
+  );
+  const currentPrices = await fetchCurrentSteamPrices(distinctNames);
+  const portfolioWithPL = portfolioWithoutPL.map((item) => {
+    const currentPrice = currentPrices[item.itemName] || 0;
+    const PL =
+      item.position * Number(currentPrice) -
+      item.position * item.avgPrice +
+      item.realizedPL;
+
+    return {
+      itemName: item.itemName,
+      position: item.position,
+      avgPrice: item.avgPrice,
+      realizedPL: item.realizedPL,
+      PL: parseFloat(PL.toFixed(2)),
+    };
+  });
+
+  return [true, portfolioWithPL];
 };
 
 export default fetchPortfolio;

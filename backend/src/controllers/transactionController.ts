@@ -196,32 +196,12 @@ export const generatePortfolio = async (
       return;
     }
 
-    const result = await fetchPortfolio(String(uid)); // Assuming fetchPortfolio is a function that fetches the portfolio data
-
-    if (result.length === 0) {
-      res.status(404).json({ message: "No transactions found for this user" });
+    const portfolioWithPL = await fetchPortfolio(String(uid)); // Assuming fetchPortfolio is a function that fetches the portfolio data
+    if (portfolioWithPL[0] === false) {
+      res.status(404).json(portfolioWithPL[1]);
       return;
     }
-    const distinctNames: string[] = result.map((item) => item.itemName);
-    const currentPrices = await fetchCurrentSteamPrices(distinctNames);
-
-    const portfolioWithPL = result.map((item) => {
-      const currentPrice = currentPrices[item.itemName] || 0;
-      const PL =
-        item.position * Number(currentPrice) -
-        item.position * item.avgPrice +
-        item.realizedPL;
-
-      return {
-        itemName: item.itemName,
-        position: item.position,
-        avgPrice: item.avgPrice,
-        realizedPL: item.realizedPL,
-        PL: parseFloat(PL.toFixed(2)),
-      };
-    });
-
-    res.status(200).json(portfolioWithPL);
+    res.status(200).json(portfolioWithPL[1]);
   } catch (error) {
     if (error instanceof Error) {
       console.error(error.message);
