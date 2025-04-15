@@ -34,7 +34,7 @@ export const createNewPortfolioHistory = async (
   }
 };
 
-export const getPortfolioHistory = async (
+export const getSingleItemPortfolioHistory = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -71,4 +71,43 @@ export const getPortfolioHistory = async (
     ]);
     res.status(200).json(portfolioResponse);
   } catch (err) {}
+};
+
+export const getConsolidatedPortfolioHistory = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  //   try {
+  //     console.log("entered");
+  //     const { uid } = req.params;
+  //     const itemName = req.query.itemName as string; // Extract itemName from query parameters
+  //     if (!uid) {
+  //       res.status(400).json({ message: "Missing uid" });
+  //       return;
+  //     }
+  //     const portfolioResponse = await PortfolioHistory.aggregate([
+  //       {
+  //         $match: {
+  //           uid,
+  //           itemName,
+  //         },
+  //       },
+  //       {
+  //         $sort: {
+  //           timestamp: -1,
+  //         },
+  //       },
+  //       {
+  //         $group: {
+  //           _id: itemName,
+  //           positions: { $push: "$position" },
+  //           avgPrices: { $push: "$avgPrice" },
+  //           realizedPLs: { $push: "$realizedPL" },
+  //           PLs: { $push: "$PL" },
+  //           timestamps: { $push: "$timestamp" },
+  //         },
+  //       },
+  //     ]);
+  //     res.status(200).json(portfolioResponse);
+  //   } catch (err) {}
 };
