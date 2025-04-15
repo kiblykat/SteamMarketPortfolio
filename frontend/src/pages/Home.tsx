@@ -3,6 +3,28 @@ import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Portfolio from "../components/Portfolio";
 import InfoPopup from "../components/InfoPopup";
+// import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import transactionAPI from "../api/api";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Home = () => {
   const navigate = useNavigate();
@@ -15,6 +37,16 @@ const Home = () => {
     setActiveTab("Home");
   }, [setActiveTab]);
 
+  useEffect(() => {
+    const fetchPL = async () => {
+      const response = await transactionAPI.get(
+        `/portfolio-history/get-consolidated/${import.meta.env.VITE_UID}`
+      );
+      const data = response.data;
+      console.log(data);
+    };
+    fetchPL();
+  }, []);
   return (
     <>
       <div className="bg-stone-100 h-screen">
@@ -52,37 +84,9 @@ const Home = () => {
           </div>
           <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-2 mx-12 md:mr-12 md:ml-4 mt-4 md:mt-12 border border-gray-300">
             <div className="card-body">
-              <div className="card-title">Recent Activity</div>
+              <div className="card-title">Profit/Loss Graph</div>
               <hr></hr>
-              <div className="overflow-y-auto">
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th>Date</th>
-                      <th>Amount</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {globalContext.transactions
-                      .slice(0, 3)
-                      .map((transaction, index) => (
-                        <tr key={index}>
-                          <td>{transaction.date.replace(/T.*/, "")}</td>
-                          <td
-                            className={
-                              transaction.price > 0
-                                ? "text-success"
-                                : "text-error"
-                            }
-                          >
-                            {transaction.price > 0 ? "+" : "-"}$
-                            {Math.abs(transaction.price).toFixed(2)}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
+              {/* <Line data={chartData} /> */}
             </div>
           </div>
           <Portfolio
