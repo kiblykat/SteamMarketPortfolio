@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import GlobalContext from "../GlobalContext";
 import { useNavigate } from "react-router-dom";
 import Portfolio from "../components/Portfolio";
 import InfoPopup from "../components/InfoPopup";
-// import { Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,10 +26,15 @@ ChartJS.register(
   Legend
 );
 
+interface PLData {
+  timestamp: string;
+  PLs: number;
+  realizedPL: number;
+}
 const Home = () => {
   const navigate = useNavigate();
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
-
+  const [PLData, setPLData] = useState<PLData[]>([]);
   const globalContext = useContext(GlobalContext);
   const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
 
@@ -43,10 +48,32 @@ const Home = () => {
         `/portfolio-history/get-consolidated/${import.meta.env.VITE_UID}`
       );
       const data = response.data;
-      console.log(data);
+      setPLData(data);
     };
     fetchPL();
   }, []);
+
+  const chartData = useMemo(
+    () => ({
+      labels: PLData.map((data) => data.timestamp),
+      datasets: [
+        {
+          label: "Realized P&L",
+          data: PLData.map((data) => data.realizedPL),
+          borderColor: "rgb(53, 162, 235)",
+          backgroundColor: "rgba(53, 162, 235, 0.5)",
+        },
+        {
+          label: "Unrealized P&L",
+          data: PLData.map((data) => data.PLs),
+          borderColor: "rgb(255, 99, 132)",
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+      ],
+    }),
+    [PLData]
+  );
+
   return (
     <>
       <div className="bg-stone-100 h-screen">
@@ -86,7 +113,7 @@ const Home = () => {
             <div className="card-body">
               <div className="card-title">Profit/Loss Graph</div>
               <hr></hr>
-              {/* <Line data={chartData} /> */}
+              <Line data={chartData} />
             </div>
           </div>
           <Portfolio
