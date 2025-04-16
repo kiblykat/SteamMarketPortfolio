@@ -15,6 +15,7 @@ import {
   Legend,
 } from "chart.js";
 import transactionAPI from "../api/api";
+import { formatDate } from "../utils/utils";
 
 ChartJS.register(
   CategoryScale,
@@ -48,6 +49,7 @@ const Home = () => {
         `/portfolio-history/get-consolidated/${import.meta.env.VITE_UID}`
       );
       const data = response.data;
+      console.log(data);
       setPLData(data);
     };
     fetchPL();
@@ -55,7 +57,7 @@ const Home = () => {
 
   const chartData = useMemo(
     () => ({
-      labels: PLData.map((data) => data.timestamp),
+      labels: PLData.map((data) => formatDate(new Date(data.timestamp))),
       datasets: [
         {
           label: "Realized P&L",
@@ -111,7 +113,7 @@ const Home = () => {
           </div>
           <div className="card bg-base-100 shadow-xl col-span-4 md:col-span-2 mx-12 md:mr-12 md:ml-4 mt-4 md:mt-12 border border-gray-300">
             <div className="card-body">
-              <div className="card-title">Profit/Loss Graph</div>
+              <div className="card-title">Profit Graph</div>
               <hr></hr>
               <Line data={chartData} />
             </div>
