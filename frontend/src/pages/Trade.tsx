@@ -106,7 +106,10 @@ const Trade = () => {
         2
       )} each`
     );
-    // navigate("/trade"); // navigate back to trade page after successful buy
+    setQuantity("");
+    setStrTotalPrice("");
+    setItemName("");
+    navigate("/trade"); // navigate back to trade page after successful buy
   };
 
   const handleSell = async (): Promise<void> => {
@@ -136,7 +139,10 @@ const Trade = () => {
     toast.success(
       `You have sold ${quantity} ${itemUrlName}s for $${price} each`
     );
-    // navigate("/trade"); // navigate back to trade page after successful buy
+    setQuantity("");
+    setStrTotalPrice("");
+    setItemName("");
+    navigate("/trade"); // navigate back to trade page after successful sell
   };
 
   return (
