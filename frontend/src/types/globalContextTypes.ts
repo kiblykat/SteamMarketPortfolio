@@ -33,6 +33,7 @@ export const initialGlobalState: GlobalContextType = {
 export interface portfolioItem {
   itemName: string;
   position: number;
+  currPrice: number;
   avgPrice: number;
   realizedPL: number;
   PL: number;

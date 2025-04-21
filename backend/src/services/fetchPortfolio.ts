@@ -92,6 +92,7 @@ const fetchPortfolio = async (
   const distinctNames: string[] = portfolioWithoutPL.map(
     (item) => item.itemName
   );
+
   const currentPrices = await fetchCurrentSteamPrices(distinctNames);
   const portfolioWithPL = portfolioWithoutPL.map((item) => {
     const currentPrice = currentPrices[item.itemName] || 0;
@@ -103,12 +104,12 @@ const fetchPortfolio = async (
     return {
       itemName: item.itemName,
       position: item.position,
+      currPrice: parseFloat(String(currentPrice)),
       avgPrice: item.avgPrice,
       realizedPL: item.realizedPL,
       PL: parseFloat(PL.toFixed(2)),
     };
   });
-
   return [true, portfolioWithPL];
 };
 
