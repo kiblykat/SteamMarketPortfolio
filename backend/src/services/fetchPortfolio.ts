@@ -105,6 +105,7 @@ const fetchPortfolio = async (
     return {
       itemName: item.itemName,
       position: item.position,
+      currPrice: parseFloat(String(currentPrice)),
       avgPrice: item.avgPrice,
       realizedPL: item.realizedPL,
       PL: parseFloat(PL.toFixed(2)),
