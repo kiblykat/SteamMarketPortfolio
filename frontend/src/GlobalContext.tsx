@@ -3,6 +3,7 @@ import transactionAPI from "./api/api";
 import {
   GlobalContextType,
   initialGlobalState,
+  portfolioItem,
   Transaction,
 } from "./types/globalContextTypes";
 import { ReactNode } from "react";
@@ -17,15 +18,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   const [balance, setBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [portfolio, setPortfolio] = useState<
-    {
-      itemName: string;
-      position: number;
-      avgPrice: number;
-      realizedPL: number;
-      PL: number;
-    }[]
-  >(() => {
+  const [portfolio, setPortfolio] = useState<portfolioItem[]>(() => {
     const storedPortfolio = localStorage.getItem("portfolio");
     return storedPortfolio ? JSON.parse(storedPortfolio) : [];
   });
@@ -39,15 +32,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
 
   async function generatePortfolio() {
     try {
-      const portfolioRes = await transactionAPI.get<
-        Array<{
-          itemName: string;
-          position: number;
-          avgPrice: number;
-          realizedPL: number;
-          PL: number;
-        }>
-      >("transactions/generate-portfolio?uid=kiblykat");
+      const portfolioRes = await transactionAPI.get<Array<portfolioItem>>(
+        "transactions/generate-portfolio?uid=kiblykat"
+      );
 
       const portfolioResData = portfolioRes.data;
 

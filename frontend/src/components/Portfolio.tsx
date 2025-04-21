@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InfoPopup from "./InfoPopup";
+import { portfolioItem } from "../types/globalContextTypes";
 
 interface PortfolioProps {
-  portfolio: {
-    itemName: string;
-    position: number;
-    avgPrice: number;
-    PL: number;
-    realizedPL: number;
-  }[];
+  portfolio: portfolioItem[];
   currentSteamPrices: Record<string, number>;
 }
 
@@ -68,9 +63,7 @@ const Portfolio: React.FC<PortfolioProps> = ({
                     </td>
                     <td>
                       <div className="font-semibold">
-                        {currentSteamPrices[item.itemName]
-                          ? currentSteamPrices[item.itemName]
-                          : "N/A"}
+                        {item.currPrice.toFixed(2)}
                       </div>
                       <div>{item.avgPrice.toFixed(2)}</div>
                     </td>
