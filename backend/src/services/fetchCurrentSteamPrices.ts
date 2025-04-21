@@ -35,6 +35,7 @@ export const fetchCurrentSteamPrices = async (
     }
 
     try {
+      console.log("Retrieving price for:", itemName);
       const response = await axios.get(hash[itemName]);
       const data = response.data;
       const price =
