@@ -6,7 +6,7 @@ import { Transaction } from "../types/globalContextTypes";
 
 const Statement = () => {
   const navigate = useNavigate();
-  const { setActiveTab, setCurrentSteamPrices } = useContext(GlobalContext);
+  const { setActiveTab } = useContext(GlobalContext);
 
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
 
@@ -19,7 +19,7 @@ const Statement = () => {
       setTransactionData(data);
     };
     fetchTransactions();
-  }, [navigate, setActiveTab, setCurrentSteamPrices]);
+  }, [navigate, setActiveTab]);
 
   return (
     <>

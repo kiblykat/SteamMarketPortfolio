@@ -23,13 +23,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     return storedPortfolio ? JSON.parse(storedPortfolio) : [];
   });
 
-  const [currentSteamPrices, setCurrentSteamPrices] = useState<
-    Record<string, number>
-  >(() => {
-    const storedCurrentSteamPrices = localStorage.getItem("currentSteamPrices");
-    return storedCurrentSteamPrices ? JSON.parse(storedCurrentSteamPrices) : {};
-  });
-
   async function generatePortfolio() {
     try {
       const portfolioRes = await transactionAPI.get<Array<portfolioItem>>(
@@ -69,8 +62,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     setBalance,
     transactions,
     setTransactions,
-    currentSteamPrices,
-    setCurrentSteamPrices,
     portfolio,
     setPortfolio,
   };

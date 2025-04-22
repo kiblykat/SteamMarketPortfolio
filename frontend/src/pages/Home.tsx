@@ -37,7 +37,7 @@ const Home = () => {
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const [PLData, setPLData] = useState<PLData[]>([]);
   const globalContext = useContext(GlobalContext);
-  const { setActiveTab, portfolio, currentSteamPrices } = globalContext;
+  const { setActiveTab, portfolio } = globalContext;
 
   useEffect(() => {
     setActiveTab("Home");
@@ -118,10 +118,7 @@ const Home = () => {
               <Line data={chartData} />
             </div>
           </div>
-          <Portfolio
-            portfolio={portfolio}
-            currentSteamPrices={currentSteamPrices}
-          />
+          <Portfolio portfolio={portfolio} />
         </div>
       </div>
       {popupVisible && (

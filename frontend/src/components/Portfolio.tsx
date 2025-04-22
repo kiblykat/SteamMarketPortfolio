@@ -5,13 +5,9 @@ import { portfolioItem } from "../types/globalContextTypes";
 
 interface PortfolioProps {
   portfolio: portfolioItem[];
-  currentSteamPrices: Record<string, number>;
 }
 
-const Portfolio: React.FC<PortfolioProps> = ({
-  portfolio,
-  currentSteamPrices,
-}) => {
+const Portfolio: React.FC<PortfolioProps> = ({ portfolio }) => {
   const [popupVisible, setPopupVisible] = useState<boolean>(false);
   const handleOverlay = () => {
     setPopupVisible(true);
@@ -54,10 +50,7 @@ const Portfolio: React.FC<PortfolioProps> = ({
                       <div>
                         <div className="font-semibold">{item.position}</div>
                         <div>
-                          {(
-                            item.position * currentSteamPrices[item.itemName] ||
-                            0
-                          ).toFixed(2)}
+                          {(item.position * item.currPrice || 0).toFixed(2)}
                         </div>
                       </div>
                     </td>

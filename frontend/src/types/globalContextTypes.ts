@@ -9,10 +9,6 @@ export interface GlobalContextType {
   setTransactions: (transactions: Transaction[]) => void;
   portfolio: portfolioItem[];
   setPortfolio: (portfolio: portfolioItem[]) => void;
-  currentSteamPrices: { [key: string]: number };
-  setCurrentSteamPrices: (currentSteamPrices: {
-    [key: string]: number;
-  }) => void;
 }
 
 export const initialGlobalState: GlobalContextType = {
@@ -26,8 +22,6 @@ export const initialGlobalState: GlobalContextType = {
   setTransactions: () => {},
   portfolio: [],
   setPortfolio: () => {},
-  currentSteamPrices: {},
-  setCurrentSteamPrices: () => {},
 };
 
 export interface portfolioItem {
